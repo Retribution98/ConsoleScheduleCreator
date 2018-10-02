@@ -12,6 +12,7 @@ namespace ConsoleScheduleCreator
         public string Name { get; }
         public int NumJob { get; }
         public int[] TimeOfWork { get; }
+        public int TimeInProcess { get; private set; }
 
         //Методы
         public Worker(string _name, int _num_Job, int[] _time_of_work)      // Конструктор
@@ -19,6 +20,7 @@ namespace ConsoleScheduleCreator
             Name = _name;
             NumJob = _num_Job;
             TimeOfWork = new int[NumJob];
+            TimeInProcess = 0;
             for (int i = 0; i < NumJob; i++)
             {
                 TimeOfWork = _time_of_work;
@@ -35,5 +37,10 @@ namespace ConsoleScheduleCreator
         {
             printer.Print(this.ToString());
         }
+        public void AddProcess (int time)
+        {
+            TimeInProcess += time;
+        }
     }
+
 }

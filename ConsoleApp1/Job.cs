@@ -66,7 +66,7 @@ namespace ConsoleScheduleCreator
             time++;
             InProgress = false;         // Снимаем стаус "в работе"
             Completed = true;          // Устанваливаем статус "завершен"
-            Console.WriteLine(this.Id + " finished at time: " + time);
+            Console.WriteLine("Работа №{0} закончила выполнение после {1} такта",this.Id+1,time);
             // Рассчитываем полученный штраф за работу
             if (time > LateTime) FinalPenalty = Mulct * (time - LateTime);
             else FinalPenalty = 0;

@@ -176,6 +176,18 @@ namespace ConsoleScheduleCreator
             return Front;
         }
 
+        private List<Worker> ReadyWorkers(int[,] plan, int time)
+        {
+            List<Worker> waitingWorkers = new List<Worker>();
+            // формируем множетсво свободных исполнителей
+            for (int number = 0; number < this.Workers.Count; number++)
+                if (plan[number, time] == 0)                                               //Если исполнитель свободен
+                {
+                    waitingWorkers.Add(Workers[number]);                               //Добавляем свободного исполнителя
+                }
+            return waitingWorkers;
+        }
+
         public void SetStatusJob(int time)          //Устанавливает статус работ проекта на момент времни time
         {
             foreach (Job job in Jobs)
@@ -214,62 +226,68 @@ namespace ConsoleScheduleCreator
         public int[,] CreateSchedule(int time)      //Создатель расписания выполнения проекта за промежуток времени длиною time
         {
             //Определяем расписание как график Ганта
-            int[,] Plan = new int[this.Workers.Count, time];
+            int[,] plan = new int[this.Workers.Count, time];
 
             //Проходим все такты планирования
             for (int time_now = 0; time_now < time; time_now++)
             {
                 //Создаем фронт работ в данный момент времени
-                List<Job> Front = this.ReadyJobs(time_now);
+                List<Job> front = this.ReadyJobs(time_now);
 
-                //Если фронт не пустой
-                if (Front.Count != 0)
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("Front in {0}:\t",time_now+1);
+                foreach (Job job in front)
                 {
-                    List<int> waitingWorkers = new List<int>();               //Массив свободных исполнителей
-
-                    // формируем множетсво свободных исполнителей
-                    for (int p = 0; p < this.Workers.Count; p++)
-                        if (Plan[p, time_now] == 0)                                               //Если исполнитель свободен
-                        {
-                            waitingWorkers.Add(p);                               //Добавляем свободного исполнителя
-                        }
-
-                    for (int workInFront = 0; ((waitingWorkers.Count > 1) && (workInFront < Front.Count)); workInFront++)
-                    {
-                        int minTime = Int32.MaxValue;                                          //Минимальное время выполнения работы
-                        int numMin = -1;                                                        //Номер исполнителя с наименьшим временем выполнения
-                        int numMinInWaiting = -1;                                                    //Номер исполнителя с наименьшим временем выполнения в массиве свободных исполнителей
-
-                        //Находим испольнителя с минимальным времением выполнения 
-                        for (int p = 0; p < waitingWorkers.Count; p++)
-                        {
-                            if (this.Workers[waitingWorkers[p]].TimeOfWork[Front[workInFront].Id-1] < minTime)       //Если время исполнителя меньше предыдущих
-                            {
-                                minTime = this.Workers[waitingWorkers[p]].TimeOfWork[Front[workInFront].Id-1];       //запоминаем новое минимальное время
-                                numMin = waitingWorkers[p];                                   //запоминаем номер исполнителя с новым минимальным временм
-                                numMinInWaiting = p;                                                //запоминаем номер исполнителя с новым минимальным временем в массиве свободных
-                            }
-                        }
-
-                        //Формируем план, если работа будет выполнена до конца 
-                        if (time_now + minTime <= time)
-                        {
-                            for (int l = 0; l < minTime; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
-                                Plan[numMin, time_now + l] = Front[workInFront].Id;
-                            Front[workInFront].TimeStart = time_now;                                               //Задаем начало выполнения работы
-                            Front[workInFront].TimeEnd = time_now + minTime - 1;                                  //Задаем конец выполнения работы
-                            Front[workInFront].Execut();                                                //Задаем статус "выполняется"
-                            Front = this.ReadyJobs(time_now);
-                        }
-
-                        //Убираем выбранного исполнителя из массива свободных
-                        waitingWorkers.Remove(numMinInWaiting);
-                    }
+                    Console.Write(job.Id + ", ");
                 }
+                Console.ResetColor();
+                Console.WriteLine();
+
+                //Массив свободных исполнителей
+                List<Worker> waitingWorkers = this.ReadyWorkers(plan, time_now);               
+
+                //Соотношение между Работником и порядковым номером в проекте
+                Dictionary<Worker, int> numerationWorkers = new Dictionary<Worker, int>();
+                for (int index = 0; index < Workers.Count; index++)
+                {
+                    numerationWorkers.Add(Workers[index], index);
+                }
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("FreeWorkers:\t");
+                foreach (Worker worker in waitingWorkers)
+                {
+                    Console.Write(worker.Name + ", ");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+
+                while ((waitingWorkers.Count > 0) && (front.Count != 0))
+                {
+                    var sortByTime = from worker in waitingWorkers
+                                     orderby worker.TimeOfWork[front.First().Id - 1], worker.TimeInProcess 
+                                     select worker;
+                    Worker bestWorker = sortByTime.First();
+
+                    //Формируем план, если работа будет выполнена до конца 
+                    if (time_now + bestWorker.TimeOfWork[front.First().Id - 1] <= time)
+                    {
+                        for (int l = 0; l < bestWorker.TimeOfWork[front.First().Id - 1]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
+                            plan[numerationWorkers[bestWorker], time_now + l] = front.First().Id;
+                        front.First().TimeStart = time_now;                                               //Задаем начало выполнения работы
+                        front.First().TimeEnd = time_now + bestWorker.TimeOfWork[front.First().Id - 1] - 1;                                  //Задаем конец выполнения работы
+                        bestWorker.AddProcess(bestWorker.TimeOfWork[front.First().Id - 1]);
+                        front.First().Execut();                                                //Задаем статус "выполняется"
+                        front = this.ReadyJobs(time_now);
+                    }
+
+                    //Убираем выбранного исполнителя из массива свободных
+                    waitingWorkers.Remove(bestWorker);
+                }
+
                 this.SetStatusJob(time_now);
             }
 
-            return Plan;
+            return plan;
         }
         /*public void Reset()                         //Сброс планирования проекта
         {

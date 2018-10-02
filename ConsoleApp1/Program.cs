@@ -30,7 +30,11 @@ namespace ConsoleScheduleCreator
                 Console.WriteLine();
             }
             Console.WriteLine("Полученный штраф: " + proj.PenaltyProject(time));
-            System.GC.Collect();
+            Console.WriteLine("Занятость работников: ");
+            foreach (Worker worker in proj.Workers)
+            {
+                Console.WriteLine(worker.ToString() + " - " + worker.TimeInProcess);
+            }
             Console.Read();
         }
  
