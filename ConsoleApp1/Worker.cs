@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    class Worker:IPrintable
+    public class Worker:IPrintable
     {
         //Свойства
         public string Name { get; }

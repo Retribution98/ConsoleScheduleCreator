@@ -9,7 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ConsoleScheduleCreator
 {
-    class Project:IPrintable
+    public class Project:IPrintable
     {    
         public string Name { get; private set; }
         public int Early { get; private set; }
@@ -158,9 +158,9 @@ namespace ConsoleScheduleCreator
 
         public List<Job> ReadyJobs(int time)            //Возвращает фронт работ проекта в момент времени time
         {
+            if (time < 0) throw new ArgumentException("Negative time");
             //Определяем множество работ, готовых к выполнению - фронт работ
             List<Job> Front = new List<Job>();
-            int num = 0;        //Количество работ во фронте
 
             //Проверяем условия готовности работ, подходящие добавляются во фронт
             foreach(Job job in Jobs)
@@ -168,7 +168,6 @@ namespace ConsoleScheduleCreator
                 if ((job.EarlyTime <= time) && (job.Ready()))       //ранее время старта работы прошло и работа готова к выполнению
                 {
                     Front.Add(job);                        //Добавляем работу
-                    num++;                                              //Увеличиваем счетчик работ
                 }
             }
 
@@ -233,7 +232,7 @@ namespace ConsoleScheduleCreator
             {
                 //Создаем фронт работ в данный момент времени
                 List<Job> front = this.ReadyJobs(time_now);
-
+                
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Front in {0}:\t",time_now+1);
                 foreach (Job job in front)

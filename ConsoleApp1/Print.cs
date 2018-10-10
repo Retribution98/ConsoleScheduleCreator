@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    interface IPrinter
+    public interface IPrinter
     {
         void Print(string msg);
     }
-    interface IPrintable
+    public interface IPrintable
     {
         void Print(IPrinter printer);
     }
 
-    class PrinterToConsole:IPrinter
+    public class PrinterToConsole:IPrinter
     {
         public void Print(string msg)
         {

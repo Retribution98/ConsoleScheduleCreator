@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    class Job:IPrintable
+    public class Job:IPrintable
     {
         //Свойства
-        public int Id { get; }
-        public string Name { get; }
-        public int EarlyTime { get; }
-        public int LateTime { get; }
-        internal List<Job> Previos { get; private set; }
-        public bool Completed { get; private set; }
-        private bool InProgress { get;set; }
-        public int Mulct { get; }
-        public int FinalPenalty { get; set; }
-        public int TimeStart { get; set; }
-        public int TimeEnd { get; set; }
+        public int Id { get; }                                              //ID работы
+        public string Name { get; }                                         //Название работы
+        public int EarlyTime { get; }                                       //Раннее начало выполнения
+        public int LateTime { get; }                                        //Позднее окончание выполнения
+        internal List<Job> Previos { get; private set; }                    //Предшествующие работы
+        public bool Completed { get; private set; }                         //Флаг окончания выполнения работы
+        private bool InProgress { get;set; }                                //Флаг выполнения работы
+        public int Mulct { get; }                                           //Штраф
+        public int FinalPenalty { get; set; }                               //Итоговый штраф
+        public int TimeStart { get; set; }                                  //Время начала выполнения работы
+        public int TimeEnd { get; set; }                                    //Время окончания выполения работы
 
         //Методы
 

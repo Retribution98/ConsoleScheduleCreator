@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleScheduleCreator", "ConsoleApp1\ConsoleScheduleCreator.csproj", "{0D99043A-1022-44E3-A414-195FA43D749F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleScheduleCreator.Tests", "ConsoleScheduleCreator.Tests\ConsoleScheduleCreator.Tests.csproj", "{CFA8BF29-29CA-4A09-8EF0-0A5343A6B45F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0D99043A-1022-44E3-A414-195FA43D749F} = {0D99043A-1022-44E3-A414-195FA43D749F}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{0D99043A-1022-44E3-A414-195FA43D749F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D99043A-1022-44E3-A414-195FA43D749F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D99043A-1022-44E3-A414-195FA43D749F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA8BF29-29CA-4A09-8EF0-0A5343A6B45F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA8BF29-29CA-4A09-8EF0-0A5343A6B45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA8BF29-29CA-4A09-8EF0-0A5343A6B45F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA8BF29-29CA-4A09-8EF0-0A5343A6B45F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
