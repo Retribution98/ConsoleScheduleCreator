@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using ConsoleScheduleCreator;
 
 namespace ConsoleScheduleCreator.Tests
 {
@@ -10,7 +9,7 @@ namespace ConsoleScheduleCreator.Tests
         [Fact]
         public void ReadyJobsTests_Null_EmptyList()
         {
-            Project proj = new Project("Test", 0, 0, 0, 0, null, null);
+            Project proj = new Project("Test", 0, 0, null, null, null);
 
             List<Job> actual = proj.ReadyJobs(10);
 
@@ -20,8 +19,10 @@ namespace ConsoleScheduleCreator.Tests
         [Fact]
         public void ReadyJobsTests_1Job_1Job()
         {
-            Project proj = new Project("Test", 0, 100, 1, 0, null, null);
-            proj.AddJob("TestJob", 0, 100, 100, 0, null);
+            List<Job> jobs = new List<Job>();
+            jobs.Add(new Job("TestJob", 1, 0, 100, 10));
+            Project proj = new Project("Test", 0, 100, jobs, null, null);
+            
             Assert.Equal(new Job("TestJob", 1, 0, 100, 100).ToString(), proj.ReadyJobs(10)[0].ToString());
 
             List<Job> actual = proj.ReadyJobs(10);
@@ -29,12 +30,5 @@ namespace ConsoleScheduleCreator.Tests
             Assert.Single(actual);
         }
 
-        [Fact]
-        public void ReadyJobsTests_negativeTime_ArgumentException()
-        {
-            Project proj = new Project("Test", 0, 0, 0, 0, null, null);
-            Action testCode = () => proj.ReadyJobs(-1);
-            Assert.Throws<ArgumentException>(testCode);
-        }
     }
 }

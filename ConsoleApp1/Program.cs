@@ -12,6 +12,7 @@ namespace ConsoleScheduleCreator
         static void Main(string[] args)
         {
             Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
+
             if (proj == null)
             {
                 System.GC.Collect();
@@ -22,7 +23,7 @@ namespace ConsoleScheduleCreator
             proj.Print(printerToConsole);
 
             int time = proj.Late;
-            int[,] plan = proj.CreateSchedule(time);
+            uint[,] plan = proj.CreateSchedule(time);
             for (int worker = 0; worker < proj.Workers.Count; worker++)
             {
                 for (int t = 0; t < time; t++)
