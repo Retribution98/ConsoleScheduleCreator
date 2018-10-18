@@ -22,7 +22,7 @@ namespace ConsoleScheduleCreator.Tests
         {
             Job job = new Job("Test", 1, 0, 100, 10);
 
-            bool actual = job.Ready();
+            bool actual = job.Ready(0);
 
             Assert.True(actual);
         }
@@ -34,7 +34,7 @@ namespace ConsoleScheduleCreator.Tests
             Job previos = new Job("PreviosTest", 1, 0, 100, 10);
             job.AddPrevios(previos);
 
-            bool actual = job.Ready();
+            bool actual = job.Ready(0);
 
             Assert.False(actual);
         }
@@ -44,21 +44,21 @@ namespace ConsoleScheduleCreator.Tests
         {
             Job job = new Job("Test", 1, 0, 100, 10);
             Job previos = new Job("PreviosTest", 1, 0, 100, 10);
-            previos.Complete(0);
+            previos.Complete(0, 5);
             job.AddPrevios(previos);
 
-            bool actual = job.Ready();
+            bool actual = job.Ready(10);
 
             Assert.True(actual);
         }
 
         [Fact]
-        public void Ready_InProgress_False()
+        public void Ready_PreviosInProgress_False()
         {
             Job job = new Job("Test", 1, 0, 100, 10);
-            job.Execut(1,10);
+            job.Complete(0,10);
 
-            bool actual = job.Ready();
+            bool actual = job.Ready(5);
 
             Assert.False(actual);
         }
@@ -67,9 +67,19 @@ namespace ConsoleScheduleCreator.Tests
         public void Ready_Compleeted_False()
         {
             Job job = new Job("Test", 1, 0, 100, 10);
-            job.Complete(0);
+            job.Complete(0,5);
 
-            bool actual = job.Ready();
+            bool actual = job.Ready(10);
+
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void Ready_TooEarlyTime_True()
+        {
+            Job job = new Job("Test", 1, 10, 100, 10);
+
+            bool actual = job.Ready(0);
 
             Assert.False(actual);
         }
@@ -111,7 +121,7 @@ namespace ConsoleScheduleCreator.Tests
         public void GetPenaltyForTime_CompletedBeforeLastTime_0()
         {
             Job job = new Job("Test", 1, 0, 10, 10);
-            job.Complete(5);
+            job.Complete(0,5);
 
             Int64 actual = job.GetPenaltyForTime(20);
             Int64 expected = 0;
@@ -123,10 +133,46 @@ namespace ConsoleScheduleCreator.Tests
         public void GetPenaltyForTime_CompletedLaterLastTime_50()
         {
             Job job = new Job("Test", 1, 0, 10, 10);
-            job.Complete(15);
+            job.Complete(0,15);
 
             Int64 actual = job.GetPenaltyForTime(0);
             Int64 expected = 50;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Complete_BeforeLastTime_0()
+        {
+            Job job = new Job("Test", 1, 0, 10, 10);
+
+            job.Complete(0, 5);
+            Int64 actual = job.FinalPenalty;
+            Int64 expected = 0;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Complete_5TimeLastTime_50()
+        {
+            Job job = new Job("Test", 1, 0, 10, 10);
+
+            job.Complete(0, 15);
+            Int64 actual = job.FinalPenalty;
+            Int64 expected = 50;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Complete_LastTime_0()
+        {
+            Job job = new Job("Test", 1, 0, 10, 10);
+
+            job.Complete(0, 10);
+            Int64 actual = job.FinalPenalty;
+            Int64 expected = 0;
 
             Assert.Equal(expected, actual);
         }

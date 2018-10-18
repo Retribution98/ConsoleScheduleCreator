@@ -39,6 +39,12 @@ namespace ConsoleScheduleCreator
             Workers = new List<Worker>();
             Jobs = jobs;
 
+            uint[] idJobs = new uint[jobs.Count];
+            for (int i =0; i<jobs.Count; i++)
+            {
+                idJobs[i] = jobs[i].Id;
+            }
+
             //создаем исполнителей проекта
             for (int i = 0; i < nameWorkers.Length; i++)
             {
@@ -50,7 +56,7 @@ namespace ConsoleScheduleCreator
                     timeOfJob[j] = workersTime[i, j];
                 }
                 //добавляем работника
-                Workers.Add(new Worker(nameWorkers[i], jobs.Count, timeOfJob));
+                Workers.Add(new Worker(nameWorkers[i], idJobs, timeOfJob));
             }
         }
 
@@ -164,7 +170,7 @@ namespace ConsoleScheduleCreator
             //Проверяем условия готовности работ, подходящие добавляются во фронт
             foreach(Job job in Jobs)
             {
-                if ((job.EarlyTime <= time) && (job.Ready(time)))       //ранее время старта работы прошло и работа готова к выполнению
+                if (job.Ready(time))       //ранее время старта работы прошло и работа готова к выполнению
                 {
                     Front.Add(job);                        //Добавляем работу
                 }
@@ -223,6 +229,7 @@ namespace ConsoleScheduleCreator
                 //Создаем фронт работ в данный момент времени
                 List<Job> front = this.ReadyJobs(time_now);
                 
+                //////////////////////////////////////
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Front in {0}:\t",time_now);
                 foreach (Job job in front)
@@ -231,6 +238,7 @@ namespace ConsoleScheduleCreator
                 }
                 Console.ResetColor();
                 Console.WriteLine();
+                ///////////////////////////////////////
 
                 //Массив свободных исполнителей
                 List<Worker> waitingWorkers = this.ReadyWorkers(plan, time_now);               
@@ -241,6 +249,8 @@ namespace ConsoleScheduleCreator
                 {
                     numerationWorkers.Add(Workers[index], index);
                 }
+
+                ///////////////////////////////////////////////
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("FreeWorkers:\t");
                 foreach (Worker worker in waitingWorkers)
@@ -249,21 +259,22 @@ namespace ConsoleScheduleCreator
                 }
                 Console.ResetColor();
                 Console.WriteLine();
-
+                ///////////////////////////////////////////////
+                
                 while ((waitingWorkers.Count > 0) && (front.Count != 0))
                 {
                     var sortByTime = from worker in waitingWorkers
-                                     orderby worker.TimeOfWork[front.First().Id - 1], worker.TimeInProcess 
+                                     orderby worker.TimeOfWork[front.First().Id], worker.TimeInProcess 
                                      select worker;
                     Worker bestWorker = sortByTime.First();
 
                     //Формируем план, если работа будет выполнена до конца 
-                    if (time_now + bestWorker.TimeOfWork[front.First().Id - 1] <= time)
+                    if (time_now + bestWorker.TimeOfWork[front.First().Id] <= time)
                     {
-                        for (int l = 0; l < bestWorker.TimeOfWork[front.First().Id - 1]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
+                        for (int l = 0; l < bestWorker.TimeOfWork[front.First().Id]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
                             plan[numerationWorkers[bestWorker], time_now + l] = front.First().Id;
-                        front.First().Complete(time_now, time_now + bestWorker.TimeOfWork[front.First().Id - 1] - 1);             //Выполняем работу с такой-то по такой такт
-                        bestWorker.AddProcess(bestWorker.TimeOfWork[front.First().Id - 1]);                                     //Добавляем нагрузку на исполнителя
+                        front.First().Complete(time_now, time_now + bestWorker.TimeOfWork[front.First().Id] - 1);             //Выполняем работу с такой-то по такой такт
+                        bestWorker.AddProcess(front.First().Id);                                                            //Добавляем нагрузку на исполнителя
 
                         front.Remove(front.First());                                                                            //Убираем работу из фронта
                     }

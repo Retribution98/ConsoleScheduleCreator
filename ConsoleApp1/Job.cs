@@ -46,7 +46,7 @@ namespace ConsoleScheduleCreator
         public bool Ready(int time)         // Работа готова к выполнению
         {
             if (Completed) return false; //Если работа завершена - не готова к выполнению
-
+            if (EarlyTime > time) return false;     //если раннее время не наступило - не готова
             //Проверяем завершение выполнения предшественников
             foreach (Job prev in Previos)
             {

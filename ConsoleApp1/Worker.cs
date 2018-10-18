@@ -11,35 +11,37 @@ namespace ConsoleScheduleCreator
         //Свойства
         public string Name { get; }
         public int NumJob { get; }
-        public int[] TimeOfWork { get; }
+        public Dictionary<uint,int> TimeOfWork { get; }
         public int TimeInProcess { get; private set; }
 
         //Методы
-        public Worker(string _name, int _num_Job, int[] _time_of_work)      // Конструктор
+        public Worker(string _name, uint[] id_jobs, int[] time_of_work)      // Конструктор
         {
+            if (id_jobs.Length != time_of_work.Length) throw new ArgumentException("Length array id_jobs and time_of_work are different");
             Name = _name;
-            NumJob = _num_Job;
-            TimeOfWork = new int[NumJob];
+            NumJob = id_jobs.Length;
+            TimeOfWork = new Dictionary<uint, int>();
             TimeInProcess = 0;
-            for (int i = 0; i < NumJob; i++)
+
+            for (int i=0; i<NumJob; i++)
             {
-                TimeOfWork = _time_of_work;
+                TimeOfWork.Add(id_jobs[i], time_of_work[i]);
             }
         }
         public override string ToString()
         {
             StringBuilder msg = new StringBuilder("Имя: " + Name + "\n");
-            for (int job = 0; job < NumJob; job++)
-                msg.AppendFormat("№" + job + ": " + TimeOfWork[job] + "   ");
+            foreach (KeyValuePair<uint,int> duo in TimeOfWork)
+                msg.AppendFormat("№" + duo.Key + ": " + duo.Value + "   ");
             return msg.ToString();
         }
         public void Print(IPrinter printer)
         {
             printer.Print(this.ToString());
         }
-        public void AddProcess (int time)
+        public void AddProcess (uint id_job)
         {
-            TimeInProcess += time;
+            TimeInProcess += TimeOfWork[id_job];
         }
     }
 

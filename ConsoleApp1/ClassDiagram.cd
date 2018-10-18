@@ -3,7 +3,7 @@
   <Class Name="ConsoleScheduleCreator.Job">
     <Position X="8.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACIAAACAAACAsEAAAAAAQAAAAADAAAQgQgABAEAAg=</HashCode>
+      <HashCode>AAACIAAACAAACAsEAAAAAAQAAAAABAAAQgQgAAAEAAA=</HashCode>
       <FileName>Job.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -16,19 +16,19 @@
     </TypeIdentifier>
     <Lollipop Orientation="Right" Position="0.1" />
   </Class>
+  <Class Name="ConsoleScheduleCreator.Project">
+    <Position X="6.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAIEAACEAAQAQAAAAAAAAgAQAgAAAEAAA=</HashCode>
+      <FileName>Project.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Class Name="ConsoleScheduleCreator.Worker">
     <Position X="3.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAABAAAAAAAAAUAAAAAAQAAAAAAAAAAAAEAAAEAAA=</HashCode>
       <FileName>Worker.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="ConsoleScheduleCreator.Project">
-    <Position X="6.25" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAIEAACEAAQAQAAAAAAAAgAQAgAAIEAAA=</HashCode>
-      <FileName>Project.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
