@@ -11,7 +11,7 @@ namespace ConsoleScheduleCreator
     {
         static void Main(string[] args)
         {
-            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
+            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data2.xlsx");
 
             if (proj == null)
             {
