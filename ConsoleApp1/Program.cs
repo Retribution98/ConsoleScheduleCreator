@@ -11,7 +11,7 @@ namespace ConsoleScheduleCreator
     {
         static void Main(string[] args)
         {
-            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
+            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data2.xlsx");
             if (proj == null)
             {
                 System.GC.Collect();
@@ -20,7 +20,8 @@ namespace ConsoleScheduleCreator
             }
 
             PrinterToConsole printerToConsole = new PrinterToConsole();
-            proj.CreateSchedule(new FrontAlgorithm(new GredyStratagy()));
+            proj.Print(printerToConsole);
+            proj.CreateSchedule(new FrontAlgorithm(new GreedyStratagy()));
             proj.Schedule.Print(printerToConsole);
             
             Console.Read();

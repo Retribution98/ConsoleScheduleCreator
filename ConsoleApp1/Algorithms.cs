@@ -43,6 +43,7 @@ namespace ConsoleScheduleCreator
 
         List<Job> GetReadyJobs(List<Job> jobs, int time)
         {
+            if (jobs == null) return null;
             List<Job> readyJobs = new List<Job>();
             foreach (Job job in jobs)
             {
