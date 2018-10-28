@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="ConsoleScheduleCreator.Job">
-    <Position X="8.75" Y="2.5" Width="1.5" />
+    <Position X="5.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACIAAACAAACAsEAAAAAAQAAAAABAAAQgQgAAAEAAA=</HashCode>
       <FileName>Job.cs</FileName>
@@ -17,9 +17,9 @@
     <Lollipop Orientation="Right" Position="0.1" />
   </Class>
   <Class Name="ConsoleScheduleCreator.Project">
-    <Position X="6.25" Y="2.5" Width="1.5" />
+    <Position X="7.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAIAAAIEAACEAAQAQAAAAAAAAgAQAgAAAEAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAIAAACEAAQAQAAEAAAAAAAQAgAAAEAAA=</HashCode>
       <FileName>Project.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -32,6 +32,30 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="ConsoleScheduleCreator.GredyStratagy">
+    <Position X="14.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FrontStratagys.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.FrontAlgorithm" BaseTypeListCollapsed="true">
+    <Position X="11" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACAAEAAAAAAAAAIgAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Algorithms.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="ConsoleScheduleCreator.Schedule" BaseTypeListCollapsed="true">
+    <Position X="2" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAgAAEAAA=</HashCode>
+      <FileName>Algorithms.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
   <Interface Name="ConsoleScheduleCreator.IPrinter">
     <Position X="3.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -44,6 +68,20 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
       <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.IFrontStratagy">
+    <Position X="13" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FrontStratagys.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.IAlgorithm">
+    <Position X="9.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Algorithms.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

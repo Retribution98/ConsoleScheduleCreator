@@ -15,6 +15,7 @@ namespace ConsoleScheduleCreator
         public int Late { get; private set; }
         internal List<Job> Jobs { get; private set; }
         internal List<Worker> Workers { get; private set; }
+        public Schedule Schedule { get; private set; }
 
         //Конструктор
         public Project(string name, int early, int late, List<Job> jobs, string[] nameWorkers, int[,] workersTime)
@@ -162,47 +163,6 @@ namespace ConsoleScheduleCreator
             return proj;
         }
 
-        public List<Job> ReadyJobs(int time)            //Возвращает фронт работ проекта в момент времени time
-        {
-            //Определяем множество работ, готовых к выполнению - фронт работ
-            List<Job> Front = new List<Job>();
-
-            //Проверяем условия готовности работ, подходящие добавляются во фронт
-            foreach(Job job in Jobs)
-            {
-                if (job.Ready(time))       //ранее время старта работы прошло и работа готова к выполнению
-                {
-                    Front.Add(job);                        //Добавляем работу
-                }
-            }
-
-            //Возвращаем сформированный фронт работ
-            return Front;
-        }
-
-        private List<Worker> ReadyWorkers(uint[,] plan, int time)
-        {
-            List<Worker> waitingWorkers = new List<Worker>();
-            // формируем множетсво свободных исполнителей
-            for (int number = 0; number < this.Workers.Count; number++)
-                if (plan[number, time] == 0)                                               //Если исполнитель свободен
-                {
-                    waitingWorkers.Add(Workers[number]);                               //Добавляем свободного исполнителя
-                }
-            return waitingWorkers;
-        }
-
-        public Int64 PenaltyProject(int time)     //Общая сумма штрафа работ проекта на момент времени time
-        {
-            Int64 penalty = 0;
-            foreach(Job job in Jobs)
-            {
-                penalty += job.GetPenaltyForTime(time);        //Прибавляем штраф очередной работы
-                Console.WriteLine("ID: " + job.Id + "\tШтраф:" + job.Mulct + "\tОбщий штраф: " + job.FinalPenalty);
-            }
-            return penalty;
-        }
-
         public void Print(IPrinter printer)
         {
             string msg = "\nНазвание проекта: " + Name + "\nКоличество работ: " + Jobs.Count + "\tКоличество работников: " + Workers.Count + "\nРаботы: \n";
@@ -218,75 +178,10 @@ namespace ConsoleScheduleCreator
             }
         }
 
-        public uint[,] CreateSchedule(int time)      //Создатель расписания выполнения проекта за промежуток времени длиною time
+        public void CreateSchedule(IAlgorithm algorithm)
         {
-            //Определяем расписание как график Ганта
-            uint[,] plan = new uint[this.Workers.Count, time];
-
-            //Проходим все такты планирования
-            for (int time_now = 0; time_now < time; time_now++)
-            {
-                //Создаем фронт работ в данный момент времени
-                List<Job> front = this.ReadyJobs(time_now);
-                
-                //////////////////////////////////////
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("Front in {0}:\t",time_now);
-                foreach (Job job in front)
-                {
-                    Console.Write(job.Id + ", ");
-                }
-                Console.ResetColor();
-                Console.WriteLine();
-                ///////////////////////////////////////
-
-                //Массив свободных исполнителей
-                List<Worker> waitingWorkers = this.ReadyWorkers(plan, time_now);               
-
-                //Соотношение между Работником и порядковым номером в проекте
-                Dictionary<Worker, int> numerationWorkers = new Dictionary<Worker, int>();
-                for (int index = 0; index < Workers.Count; index++)
-                {
-                    numerationWorkers.Add(Workers[index], index);
-                }
-
-                ///////////////////////////////////////////////
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("FreeWorkers:\t");
-                foreach (Worker worker in waitingWorkers)
-                {
-                    Console.Write(worker.Name + ", ");
-                }
-                Console.ResetColor();
-                Console.WriteLine();
-                ///////////////////////////////////////////////
-                
-                while ((waitingWorkers.Count > 0) && (front.Count != 0))
-                {
-                    var sortByTime = from worker in waitingWorkers
-                                     orderby worker.TimeOfWork[front.First().Id], worker.TimeInProcess 
-                                     select worker;
-                    Worker bestWorker = sortByTime.First();
-
-                    //Формируем план, если работа будет выполнена до конца 
-                    if (time_now + bestWorker.TimeOfWork[front.First().Id] <= time)
-                    {
-                        for (int l = 0; l < bestWorker.TimeOfWork[front.First().Id]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
-                            plan[numerationWorkers[bestWorker], time_now + l] = front.First().Id;
-                        front.First().Complete(time_now, time_now + bestWorker.TimeOfWork[front.First().Id] - 1);             //Выполняем работу с такой-то по такой такт
-                        bestWorker.AddProcess(front.First().Id);                                                            //Добавляем нагрузку на исполнителя
-
-                        front.Remove(front.First());                                                                            //Убираем работу из фронта
-                    }
-
-                    //Убираем выбранного исполнителя из массива свободных
-                    waitingWorkers.Remove(bestWorker);
-                }
-            }
-
-            return plan;
+            Schedule =  algorithm.CreateShedule(this);
         }
-        
         /*public void Reset()                         //Сброс планирования проекта
         {
             foreach(Job job in Jobs)

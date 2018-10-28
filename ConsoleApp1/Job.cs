@@ -16,7 +16,7 @@ namespace ConsoleScheduleCreator
         public int Mulct { get; }                                           //Штраф
         public Int64 FinalPenalty { get; private set; }                               //Итоговый штраф
         private List<Job> Previos { get; set; }                    //Предшествующие работы
-        private bool Completed { get; set; }                         //Флаг окончания выполнения работы
+        public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
         private int TimeStart { get; set; }                                  //Время начала выполнения работы
         private int TimeEnd { get; set; }                                    //Время окончания выполения работы
 

@@ -11,31 +11,18 @@ namespace ConsoleScheduleCreator
     {
         static void Main(string[] args)
         {
-            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data2.xlsx");
-
+            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
             if (proj == null)
             {
                 System.GC.Collect();
                 Console.Read();
                 return;
             }
-            PrinterToConsole printerToConsole = new PrinterToConsole();
-            proj.Print(printerToConsole);
 
-            int time = proj.Late;
-            uint[,] plan = proj.CreateSchedule(time);
-            for (int worker = 0; worker < proj.Workers.Count; worker++)
-            {
-                for (int t = 0; t < time; t++)
-                    Console.Write(plan[worker, t] + " ");
-                Console.WriteLine();
-            }
-            Console.WriteLine("Полученный штраф: " + proj.PenaltyProject(time));
-            Console.WriteLine("Занятость работников: ");
-            foreach (Worker worker in proj.Workers)
-            {
-                Console.WriteLine(worker.ToString() + " - " + worker.TimeInProcess);
-            }
+            PrinterToConsole printerToConsole = new PrinterToConsole();
+            proj.CreateSchedule(new FrontAlgorithm(new GredyStratagy()));
+            proj.Schedule.Print(printerToConsole);
+            
             Console.Read();
         }
  
