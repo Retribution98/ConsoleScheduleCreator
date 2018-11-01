@@ -71,6 +71,7 @@ namespace ConsoleScheduleCreator
                              where plan[numerationWorkers[worker], time]==0
                              orderby worker.TimeOfWork[job.Id], worker.TimeInProcess
                              select worker;
+
             if (sortByTime.Count() == 0) throw new OperationCanceledException("Haven't ready worker");
             Worker bestWorker = sortByTime.First();
 

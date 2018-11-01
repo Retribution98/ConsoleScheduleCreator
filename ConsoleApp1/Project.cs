@@ -13,8 +13,8 @@ namespace ConsoleScheduleCreator
         public string Name { get; private set; }
         public int Early { get; private set; }
         public int Late { get; private set; }
-        internal List<Job> Jobs { get; private set; }
-        internal List<Worker> Workers { get; private set; }
+        public  List<Job> Jobs { get; private set; }
+        public  List<Worker> Workers { get; private set; }
         public Schedule Schedule { get; private set; }
 
         //Конструктор
