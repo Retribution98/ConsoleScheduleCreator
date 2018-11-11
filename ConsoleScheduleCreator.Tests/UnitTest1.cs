@@ -112,12 +112,12 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
 
-            uint[,] actual = project.Schedule._planner;
-            uint[,] expected =
+            Job[,] actual = project.Schedule._planner;
+            Job[,] expected =
             {
-                {1,1,1,2,2,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0 },
-                {0,0,0,4,4,4,0,0,5,5,0,0,0,0,0,8,8,8,0,0 },
-                {0,0,0,0,0,3,3,3,0,0,0,0,7,7,7,0,0,0,0,0 }
+                {job1,job1,job1,job2,job2,null,null,null,null,null,job6,null,null,null,null,null,null,null,null,null },
+                {null,null,null,job4,job4,job4,null,null,job5,job5,null,null,null,null,null,job8,job8,job8,null,null },
+                {null,null,null,null,null,job3,job3,job3,null,null,null,null,job7,job7,job7,null,null,null,null,null }
             };
 
             Assert.Equal(expected, actual);
@@ -154,12 +154,12 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
 
-            uint[,] actual = project.Schedule._planner;
-            uint[,] expected =
+            Job[,] actual = project.Schedule._planner;
+            Job[,] expected =
             {
-                {1,4,4,4,0,0,0,0,0,0,0,0,0,0,0 },
-                {3,3,3,3,3,3,3,3,0,0,7,7,0,0,0 },
-                {2,2,2,2,5,5,5,0,6,6,0,0,8,8,0 }
+                {job1,job4,job4,job4,null,null,null,null,null,null,null,null,null,null,null },
+                {job3,job3,job3,job3,job3,job3,job3,job3,null,null,job7,job7,null,null,null },
+                {job2,job2,job2,job2,job5,job5,job5,null,job6,job6,null,null,job8,job8,null }
             };
 
             Assert.Equal(expected, actual);
@@ -196,12 +196,12 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new GreedyStratagy()));
 
-            uint[,] actual = project.Schedule._planner;
-            uint[,] expected =
+            Job[,] actual = project.Schedule._planner;
+            Job[,] expected =
             {
-                {2,2,2,0,0,0,0,0,0,0,0,0,0,0,0 },
-                {4,0,0,5,5,7,7,8,8,0,0,0,0,0,0 },
-                {1,3,3,6,6,0,0,0,0,0,0,0,0,0,0 }
+                {job2,job2,job2,null,null,null,null,null,null,null,null,null,null,null,null },
+                {job4,null,null,job5,job5,job7,job7,job8,job8,null,null,null,null,null,null },
+                {job1,job3,job3,job6,job6,null,null,null,null,null,null,null,null,null,null }
             };
 
             Assert.Equal(expected, actual);

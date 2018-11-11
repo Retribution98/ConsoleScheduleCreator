@@ -8,9 +8,9 @@ namespace ConsoleScheduleCreator
 {
     public struct Schedule: IPrintable
     {
-        public readonly uint[,] _planner;
+        public readonly Job[,] _planner;
         public readonly Int64 _penalty;
-        public Schedule(uint[,] planner, Int64 penalty)
+        public Schedule(Job[,] planner, Int64 penalty)
         {
             _planner = planner;
             _penalty = penalty;
@@ -21,7 +21,9 @@ namespace ConsoleScheduleCreator
             for (int worker = 0; worker < _planner.GetLength(0); worker++)
             {
                 for (int t = 0; t < _planner.GetLength(1); t++)
-                    plan.AppendFormat("{0} ", _planner[worker, t].ToString());
+                    if (_planner[worker, t] != null)
+                        plan.AppendFormat("{0} ", _planner[worker, t].Id.ToString());
+                else plan.AppendFormat("- ");
                 plan.AppendLine();
             }
             printer.Print(plan + "\n Penalty: " + _penalty.ToString());
@@ -35,30 +37,38 @@ namespace ConsoleScheduleCreator
 
     public class FrontAlgorithm : IAlgorithm
     {
+        class Front
+        {
+            public List<Job> Jobs { get;  }
+
+            public Front(List<Job> jobs, int time)
+            {
+                if (jobs != null)
+                {
+                    Jobs = new List<Job>();
+                    foreach (Job job in jobs)
+                    {
+                        if (job.Ready(time))
+                        {
+                            Jobs.Add(job);
+                        }
+                    }
+                }
+            }
+            public Job GetNextJob(IFrontStratagy stratagyNextJob)
+            {
+                return stratagyNextJob.GetJob(Jobs);
+            }
+        }
+
         readonly IFrontStratagy stratagyNextJob;
+
         public FrontAlgorithm(IFrontStratagy stratagy)
         {
             stratagyNextJob = stratagy;
         }
-
-        List<Job> GetReadyJobs(List<Job> jobs, int time)
-        {
-            if (jobs == null) return null;
-            List<Job> readyJobs = new List<Job>();
-            foreach (Job job in jobs)
-            {
-                if (job.Ready(time))
-                {
-                    readyJobs.Add(job);
-                }
-            }
-            return readyJobs;
-        }
-        Job GetNextJob(List<Job> jobs)
-        {
-            return stratagyNextJob.GetJob(jobs);
-        }
-        Int64 AppointJob(Project proj, uint[,] plan, int time, Job job)
+        
+        Int64 AppointJob(Project proj, Job[,] plan, int time, Job job)
         {
             //Соотношение между Работником и порядковым номером в проекте
             Dictionary<Worker, int> numerationWorkers = new Dictionary<Worker, int>();
@@ -68,7 +78,7 @@ namespace ConsoleScheduleCreator
             }
 
             var sortByTime = from worker in proj.Workers
-                             where plan[numerationWorkers[worker], time]==0
+                             where plan[numerationWorkers[worker], time]==null
                              orderby worker.TimeOfWork[job.Id], worker.TimeInProcess
                              select worker;
 
@@ -76,13 +86,13 @@ namespace ConsoleScheduleCreator
             Worker bestWorker = sortByTime.First();
 
             for (int l = 0; l < bestWorker.TimeOfWork[job.Id]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
-                plan[numerationWorkers[bestWorker], time + l] = job.Id;
+                plan[numerationWorkers[bestWorker], time + l] = job;
             job.Complete(time, time + bestWorker.TimeOfWork[job.Id] - 1);             //Выполняем работу с такой-то по такой такт
             bestWorker.AddProcess(job.Id);                                                            //Добавляем нагрузку на исполнителя
 
             return job.FinalPenalty;
         }
-        bool HaveNotCompletedJob(Project proj)
+        bool HaveDidntCompleteJob(Project proj)
         {
             foreach (Job job in proj.Jobs)
             {
@@ -90,32 +100,39 @@ namespace ConsoleScheduleCreator
             }
             return false;
         }
+        bool HaveFreeWorker (Job[,] plan, int time)
+        {
+            for (int worker=0; worker<plan.GetLength(0); worker++)
+            {
+                if (plan[worker, time] == null)
+                    return true;
+            }
+            return false;
+        }
         public Schedule CreateShedule(Project proj)
         {
             //Определяем расписание как график Ганта
-            uint[,] plan = new uint[proj.Workers.Count, proj.Late];
+            Job[,] plan = new Job[proj.Workers.Count, proj.Late];
             Int64 penalty = 0;
 
             //Строим расписание
-            for (int time=0; HaveNotCompletedJob(proj); time++)
+            for (int time=0; HaveDidntCompleteJob(proj); time++)
             {
                 //Создаем фронт работ в данный момент времени
-                List<Job> front = GetReadyJobs(proj.Jobs, time);
+                Front front = new Front(proj.Jobs, time);
                 //Назанчаем работы из фронта
-                while (front.Count != 0)
+                while ((front.Jobs.Count != 0) && HaveFreeWorker(plan, time))
                 {
-                    Job nextJob = GetNextJob(front);
                     try
                     {
-                        penalty += AppointJob(proj, plan, time, nextJob);
+                        penalty += AppointJob(proj, plan, time, front.GetNextJob(stratagyNextJob));
                     }
                     catch (OperationCanceledException)
                     {
                         break;
                     }
                     
-                    front = GetReadyJobs(proj.Jobs, time);
-                    //TODO добавить проверку на доступность ресурсов
+                    front = new Front(proj.Jobs, time);
                 }
             }
 

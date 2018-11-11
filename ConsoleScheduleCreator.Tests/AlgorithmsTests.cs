@@ -20,7 +20,7 @@ namespace ConsoleScheduleCreator.Tests
             Object[] arg = new Object[2];
             arg[0] = jobs;
             arg[1] = 2;
-
+                
             object actual = t.InvokeMember("GetReadyJobs",
                                     BindingFlags.InvokeMethod | BindingFlags.NonPublic |
                                     BindingFlags.Public | BindingFlags.Instance,
@@ -86,7 +86,7 @@ namespace ConsoleScheduleCreator.Tests
             string[] workersName = new string[1] { "Vasya" };
             int[,] workersTime = new int[1, 1] { { 3 } };
             Project proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
-            uint[,] plan = new uint[1, 5];
+            Job[,] plan = new Job[1, 5];
 
             Object[] arg = new Object[4];
             arg[0] = proj;
@@ -114,7 +114,7 @@ namespace ConsoleScheduleCreator.Tests
             string[] workersName = new string[1] { "Vasya" };
             int[,] workersTime = new int[1, 1] { { 3 } };
             Project proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
-            uint[,] plan = new uint[1, 5];
+            Job[,] plan = new Job[1, 5];
 
             Object[] arg = new Object[4];
             arg[0] = proj;
@@ -144,7 +144,7 @@ namespace ConsoleScheduleCreator.Tests
             string[] workersName = new string[3] { "Vasya", "Petya", "Vova" };
             int[,] workersTime = new int[3, 1] { { 5 }, { 3 }, { 3 } };
             Project proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
-            uint[,] plan = new uint[3, 5];
+            Job[,] plan = new Job[3, 5];
 
             Object[] arg = new Object[4];
             arg[0] = proj;
@@ -176,7 +176,7 @@ namespace ConsoleScheduleCreator.Tests
             string[] workersName = new string[1] { "Vasya" };
             int[,] workersTime = new int[1, 1] { { 3 } };
             Project proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
-            uint[,] plan = new uint[1, 5];
+            Job[,] plan = new Job[1, 5];
 
             Object[] arg = new Object[4];
             arg[0] = proj;
@@ -189,8 +189,8 @@ namespace ConsoleScheduleCreator.Tests
                                     BindingFlags.Public | BindingFlags.Instance,
                                     null, obj, arg);
 
-            uint[,] actual = plan;
-            uint[,] expected = new uint[1,5]{ {0,1,1,1,0 } };
+            Job[,] actual = plan;
+            Job[,] expected = new Job[1,5]{ {null,job1,job1,job1,null } };
 
             Assert.Equal(expected, actual);
         }
