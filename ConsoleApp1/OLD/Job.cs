@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    public class Job:IPrintable
+    public class JobOld:IPrintable
     {
         //Свойства
         public uint Id { get; }                                              //ID работы
@@ -15,7 +15,7 @@ namespace ConsoleScheduleCreator
         public int LateTime { get; }                                        //Позднее окончание выполнения
         public int Mulct { get; }                                           //Штраф
         public Int64 FinalPenalty { get; private set; }                               //Итоговый штраф
-        private List<Job> Previos { get; set; }                    //Предшествующие работы
+        private List<JobOld> Previos { get; set; }                    //Предшествующие работы
         public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
         private int TimeStart { get; set; }                                  //Время начала выполнения работы
         private int TimeEnd { get; set; }                                    //Время окончания выполения работы
@@ -23,7 +23,7 @@ namespace ConsoleScheduleCreator
         //Методы
 
         //Конструктор с заданным именем, временем раннего начала и познего окнчания выполнения, а так же штрафом
-        public Job(string name, uint id, int early, int late, int mulct)      
+        public JobOld(string name, uint id, int early, int late, int mulct)      
         {
             //Инициализируем поля
             Id = id;
@@ -34,10 +34,10 @@ namespace ConsoleScheduleCreator
             Completed = false;
             TimeStart = -1;
             TimeEnd = -1;
-            Previos = new List<Job>();
+            Previos = new List<JobOld>();
         }
 
-        public void AddPrevios(Job NewPrevios)      // Добавление предшествующей работы
+        public void AddPrevios(JobOld NewPrevios)      // Добавление предшествующей работы
         {
             if (NewPrevios == null) throw new ArgumentNullException("Previos can't be null");
             Previos.Add(NewPrevios);          // Добавляем предшествующую работу
@@ -48,7 +48,7 @@ namespace ConsoleScheduleCreator
             if (Completed) return false; //Если работа завершена - не готова к выполнению
             if (EarlyTime > time) return false;     //если раннее время не наступило - не готова
             //Проверяем завершение выполнения предшественников
-            foreach (Job prev in Previos)
+            foreach (JobOld prev in Previos)
             {
                 if (prev.Completed == false) return false;
                 if (prev.TimeEnd >= time) return false;
@@ -83,7 +83,7 @@ namespace ConsoleScheduleCreator
         {
             StringBuilder msg = new StringBuilder("Id: " + Id + "\t Name: " + Name + "\t Раннее начало: " + EarlyTime + "\t Позднее окончание: " + LateTime + "\nПредшественники: ");
             if (Previos.Count != 0)
-                foreach (Job prev in Previos)
+                foreach (JobOld prev in Previos)
                 {
                     msg.AppendFormat(prev.Id + ", ");
                 }
@@ -108,15 +108,15 @@ namespace ConsoleScheduleCreator
    finish = false;
 }*/
 
-        /*public void AddPrevios(int amt, Job[] NewPrevios) // Добавление нескольких предшествующих работ
+        /*public void AddPrevios(int amt, JobOld[] NewPrevios) // Добавление нескольких предшествующих работ
          {
-             if (num_Prev == 0) previos = new Job[amt];
+             if (num_Prev == 0) previos = new JobOld[amt];
              else Array.Resize(ref previos, num_Prev + amt);
              for (int i = 0; i < amt; i++) previos[num_Prev + i] = NewPrevios[i];
              num_Prev = num_Prev + amt;
          }*/
 
-        /*public void ChangePrevios(int amt, Job[] NewPrevios)    // Изменение множества предшествующих работ
+        /*public void ChangePrevios(int amt, JobOld[] NewPrevios)    // Изменение множества предшествующих работ
         {
             Array.Copy(previos, NewPrevios, amt);
             num_Prev = amt;

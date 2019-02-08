@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    public class Worker:IPrintable
+    public class WorkerOld:IPrintable
     {
         //Свойства
         public string Name { get; }
@@ -15,7 +15,7 @@ namespace ConsoleScheduleCreator
         public int TimeInProcess { get; private set; }
 
         //Методы
-        public Worker(string _name, uint[] id_jobs, int[] time_of_work)      // Конструктор
+        public WorkerOld(string _name, uint[] id_jobs, int[] time_of_work)      // Конструктор
         {
             if (id_jobs.Length != time_of_work.Length) throw new ArgumentException("Length array id_jobs and time_of_work are different");
             Name = _name;

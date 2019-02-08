@@ -8,7 +8,7 @@ using System.Reflection; //чтение данных из файлов Excel
 using Excel = Microsoft.Office.Interop.Excel;
 namespace ConsoleScheduleCreator
 {
-    public class Project:IPrintable
+    public class ProjectOld:IPrintable
     {    
         public string Name { get; private set; }
         public int Early { get; private set; }
@@ -18,7 +18,7 @@ namespace ConsoleScheduleCreator
         public Schedule Schedule { get; private set; }
 
         //Конструктор
-        public Project(string name, int early, int late, List<Job> jobs, string[] nameWorkers, int[,] workersTime)
+        public ProjectOld(string name, int early, int late, List<Job> jobs, string[] nameWorkers, int[,] workersTime)
         {
             //Проверка входных данных
             if (name == null) throw new ArgumentNullException("Name can't be null!");
@@ -61,7 +61,7 @@ namespace ConsoleScheduleCreator
             }
         }
 
-        public static Project Open(string FileName)      //Открываем проект, сохраненный как файл Excel
+        public static ProjectOld Open(string FileName)      //Открываем проект, сохраненный как файл Excel
         {
             string proj_name;       //Имя проекта
             int proj_start;         //Раннее время старта работы над проектом
@@ -70,7 +70,7 @@ namespace ConsoleScheduleCreator
             int NumWorkers;         //Количество исполнителей
             string[] Name_Workers;  //Именя исполнителей
             int[,] Workers;         //Временные затраты на выполнение работ
-            Project proj = null;
+            ProjectOld proj = null;
 
             Excel.Application app = new Excel.Application();            // Приложение Excel
             Excel.Workbook workbook = null;                                    // Книга данныъх
@@ -140,7 +140,7 @@ namespace ConsoleScheduleCreator
                     jobs.Add(newJob);
                 }
                 //Создаем проект
-                proj = new Project(proj_name, proj_start, proj_end, jobs, Name_Workers, Workers);
+                proj = new ProjectOld(proj_name, proj_start, proj_end, jobs, Name_Workers, Workers);
             }
             catch (Exception exc)
             {
