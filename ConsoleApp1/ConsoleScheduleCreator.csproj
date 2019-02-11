@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ConsoleScheduleCreator</RootNamespace>
     <AssemblyName>ConsoleScheduleCreator</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Front.cs" />
     <Compile Include="FrontStatagy\FirstlyStratagy.cs" />
     <Compile Include="FrontStatagy\GreedyStratagy.cs" />
     <Compile Include="Algorithm\IAlgorithm.cs" />
@@ -52,6 +54,8 @@
     <Compile Include="DTO\UserDto.cs" />
     <Compile Include="Algorithm\FrontAlgorithm.cs" />
     <Compile Include="FrontStatagy\IFrontStratagy.cs" />
+    <Compile Include="PeriodUnit.cs" />
+    <Compile Include="Plan.cs" />
     <Compile Include="Print.cs" />
     <Compile Include="OLD\Job.cs" />
     <Compile Include="Program.cs" />
@@ -60,6 +64,7 @@
     <Compile Include="DTO\RoleEnum.cs" />
     <Compile Include="OLD\Worker.cs" />
     <Compile Include="Schedule.cs" />
+    <Compile Include="Utils\ScheduleUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
