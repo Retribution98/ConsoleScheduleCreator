@@ -13,15 +13,15 @@ namespace ScheduleCreator
         {
             if ((jobs == null) || (!jobs.Any()))
                 return null;
-            jobs.Sort(
-                (x, y) =>
-                {
-                    if (x.Mulct > y.Mulct)
-                        return -1;
-                    else if (x.Mulct < y.Mulct)
-                        return 1;
-                    else return 0;
-                });
+            //jobs.Sort(
+            //    (x, y) =>
+            //    {
+            //        if (x.Mulct > y.Mulct)
+            //            return -1;
+            //        else if (x.Mulct < y.Mulct)
+            //            return 1;
+            //        else return 0;
+            //    });
             return jobs.First();
         }
     }

@@ -16,7 +16,7 @@ namespace ScheduleCreator
             stratagyNextJob = stratagy;
         }
 
-        private List<JobDto> GetReadyJobs(List<JobDto> jobs, int time)
+        private List<JobDto> GetReadyJobs(List<JobDto> jobs, DateTime time)
         {
             if ((jobs == null) || (jobs.Any()))
                 return new List<JobDto>();
@@ -123,7 +123,7 @@ namespace ScheduleCreator
             for (int period = 0; HaveNotCompletedJob(proj) && period < numPeriods; period++)
             {
                 //Создаем фронт работ в данный момент времени
-                List<JobDto> front = GetReadyJobs(proj.Jobs, period);
+                List<JobDto> front = GetReadyJobs(proj.Jobs, timeStart + SetTime(periodUnit, period));
                 //Назанчаем работы из фронта
                 while (front.Count != 0)
                 {
@@ -139,7 +139,7 @@ namespace ScheduleCreator
                         employmentWorker[worker] += GetNumPeriods(timeWork, periodUnit);                                                            //Добавляем нагрузку на исполнителя
                     }
 
-                    front = GetReadyJobs(proj.Jobs, period);
+                    front = GetReadyJobs(proj.Jobs, timeStart + SetTime(periodUnit, period));
                     //TODO добавить проверку на доступность ресурсов
                 }
             }

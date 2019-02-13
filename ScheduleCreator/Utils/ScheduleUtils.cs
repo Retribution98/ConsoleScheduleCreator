@@ -7,9 +7,20 @@ namespace ScheduleCreator.Utils
 {
     static internal class ScheduleUtils
     {
-        public static bool IsReady(this JobDto job, int time)
+        public  static bool IsReady(this JobDto job, DateTime time)
         {
-            throw new NotImplementedException();
+            if (job.TimeEnd.HasValue || job.TimeEnd.HasValue || job.EarlyTime > time)
+            {
+                return false;
+            }
+            foreach (var parent in job.Parents)
+            {
+                if (!parent.TimeEnd.HasValue || parent.TimeEnd > time)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

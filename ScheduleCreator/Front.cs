@@ -1,30 +1,32 @@
-﻿using System;
+﻿using ScheduleApp.DataAccess.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScheduleCreator.Utils;
 
-namespace ConsoleScheduleCreator
+namespace ScheduleCreator
 {
     public class Front
     {
-        public List<Job> Jobs { get; }
+        public List<JobDto> Jobs { get; }
 
-        public Front(List<Job> jobs, int time)
+        public Front(List<JobDto> jobs, DateTime time)
         {
             if (jobs != null)
             {
-                Jobs = new List<Job>();
-                foreach (Job job in jobs)
+                Jobs = new List<JobDto>();
+                foreach (var job in jobs)
                 {
-                    if (job.Ready(time))
+                    if (job.IsReady(time))
                     {
                         Jobs.Add(job);
                     }
                 }
             }
         }
-        public Job GetNextJob(IFrontStratagy stratagyNextJob)
+        public JobDto GetNextJob(IFrontStratagy stratagyNextJob)
         {
             return stratagyNextJob.GetJob(Jobs);
         }
