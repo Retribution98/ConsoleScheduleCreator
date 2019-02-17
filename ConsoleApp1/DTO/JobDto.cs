@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScheduleApp.DataAccess.DTO
+namespace ConsoleScheduleCreator
 {
-    public class JobDto
+    public class Job
     {
         /// <summary>
         /// ID работы
@@ -24,7 +24,7 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Тип работы
         /// </summary>
-        public JobTypeDto JobType { get; set; }
+        public JobType JobType { get; set; }
 
         /// <summary>
         /// Время выполнения работы
@@ -34,7 +34,7 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Проект, включающий данную работу
         /// </summary>
-        public ProjectDto Project { get; set; }
+        public Project Project { get; set; }
 
         /// <summary>
         /// Ограничение на время раннего начала
@@ -49,7 +49,7 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Работник ,выполня
         /// </summary>
-        public UserDto Worker { get; set; }
+        public User Worker { get; set; }
 
         /// <summary>
         /// Время начала выполнения работы
@@ -64,6 +64,6 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Предшествующие рыботы по технологическим ограничениям
         /// </summary>
-        public List<JobDto> Parents { get; set; }
+        public List<Job> Parents { get; set; }
     }
 }

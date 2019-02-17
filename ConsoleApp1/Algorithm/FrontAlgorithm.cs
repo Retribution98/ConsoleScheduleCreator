@@ -1,150 +1,113 @@
-﻿using ScheduleApp.DataAccess.DTO;
-using ScheduleCreator.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleCreator
+namespace ConsoleScheduleCreator
 {
     public class FrontAlgorithm : IAlgorithm
     {
+        class Front
+        {
+            public List<Job> Jobs { get; }
+
+            public Front(List<Job> jobs, int time)
+            {
+                if (jobs != null)
+                {
+                    Jobs = new List<Job>();
+                    foreach (Job job in jobs)
+                    {
+                        if (job.Ready(time))
+                        {
+                            Jobs.Add(job);
+                        }
+                    }
+                }
+            }
+            public Job GetNextJob(IFrontStratagy stratagyNextJob)
+            {
+                return stratagyNextJob.GetJob(Jobs);
+            }
+        }
+
         readonly IFrontStratagy stratagyNextJob;
+
         public FrontAlgorithm(IFrontStratagy stratagy)
         {
             stratagyNextJob = stratagy;
         }
 
-        private List<JobDto> GetReadyJobs(List<JobDto> jobs, int time)
+        Int64 AppointJob(Project proj, Job[,] plan, int time, Job job)
         {
-            if ((jobs == null) || (jobs.Any()))
-                return new List<JobDto>();
-            var readyJobs = new List<JobDto>();
-            foreach (var job in jobs)
+            //Соотношение между Работником и порядковым номером в проекте
+            Dictionary<Worker, int> numerationWorkers = new Dictionary<Worker, int>();
+            for (int index = 0; index < proj.Workers.Count; index++)
             {
-                if (job.IsReady(time))
-                {
-                    readyJobs.Add(job);
-                }
+                numerationWorkers.Add(proj.Workers[index], index);
             }
-            return readyJobs;
+
+            var sortByTime = from worker in proj.Workers
+                             where plan[numerationWorkers[worker], time] == null
+                             orderby worker.TimeOfWork[job.Id], worker.TimeInProcess
+                             select worker;
+
+            if (sortByTime.Count() == 0) throw new OperationCanceledException("Haven't ready worker");
+            Worker bestWorker = sortByTime.First();
+
+            for (int l = 0; l < bestWorker.TimeOfWork[job.Id]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
+                plan[numerationWorkers[bestWorker], time + l] = job;
+            job.Complete(time, time + bestWorker.TimeOfWork[job.Id] - 1);             //Выполняем работу с такой-то по такой такт
+            bestWorker.AddProcess(job.Id);                                                            //Добавляем нагрузку на исполнителя
+
+            return job.FinalPenalty;
         }
-
-        private JobDto GetNextJob(List<JobDto> jobs)
+        bool HaveDidntCompleteJob(Project proj)
         {
-            return stratagyNextJob.GetJob(jobs);
-        }
-
-        private UserDto AppointJob(ProjectDto proj, Plan plan, int time, JobDto job)
-        {
-            var workers = from worker in proj.Workers
-                          where plan[worker, time] == null
-                          orderby worker.Qualifications.Where(q => q.JobType == job.JobType).Select(q => q.EffectivePercent)
-                          select worker;
-
-            if (!workers.Any())
-                return null;
-            var bestWorker = workers.First();
-            var timeWork = bestWorker.Qualifications.Where(q => q.JobType == job.JobType).Select(q => q.EffectivePercent).FirstOrDefault() * job.LeadTime;
-            var numPeriods = GetNumPeriods(timeWork, plan.TimeUnit);
-            for (int l = 0; l < numPeriods; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
-                plan[bestWorker, time + l] = job;
-
-            return bestWorker;
-        }
-
-        private bool HaveNotCompletedJob(ProjectDto proj)
-        {
-            foreach (var job in proj.Jobs)
+            foreach (Job job in proj.Jobs)
             {
-                if (!job.TimeEnd.HasValue) return true;
+                if (!job.Completed) return true;
             }
             return false;
         }
-
-        private TimeSpan SetTime(PeriodUnit periodUnit, int numPeriod)
+        bool HaveFreeWorker(Job[,] plan, int time)
         {
-            switch (periodUnit)
+            for (int worker = 0; worker < plan.GetLength(0); worker++)
             {
-                case PeriodUnit.Milliseconds:
-                    return TimeSpan.FromMilliseconds(numPeriod);
-                case PeriodUnit.Seconds:
-                    return TimeSpan.FromSeconds(numPeriod);
-                case PeriodUnit.Minutes:
-                    return TimeSpan.FromMinutes(numPeriod);
-                case PeriodUnit.Hours:
-                    return TimeSpan.FromHours(numPeriod);
-                case PeriodUnit.Days:
-                    return TimeSpan.FromDays(numPeriod);
-                default:
-                    throw new NotImplementedException("This periodUnit not implemented");
+                if (plan[worker, time] == null)
+                    return true;
             }
+            return false;
         }
-
-        private int GetNumPeriods(TimeSpan time, PeriodUnit unit)
+        public Schedule CreateShedule(Project proj)
         {
-            switch (unit)
-            {
-                case PeriodUnit.Milliseconds:
-                    return time.Milliseconds;
-                case PeriodUnit.Seconds:
-                    return time.Seconds;
-                case PeriodUnit.Minutes:
-                    return time.Minutes;
-                case PeriodUnit.Hours:
-                    return time.Hours;
-                case PeriodUnit.Days:
-                    return time.Days;
-                default:
-                    throw new NotImplementedException("Schedule for this periodUnit not implemented");
-            }
-        }
-
-        public Schedule CreateShedule(ProjectDto proj, DateTime timeStart, DateTime timeEnd, PeriodUnit periodUnit)
-        {
-            if (proj == null) throw new ArgumentNullException("Project is null");
-            if (timeEnd <= timeStart) throw new ArgumentException("EarlyTime more LateTime");
-
-            var employmentWorker = new Dictionary<UserDto, int>();
-            foreach (var worker in proj.Workers)
-            {
-                employmentWorker[worker] = 0;
-            }
-
-            var timeSpan = timeEnd - timeStart;
-            int numPeriods = GetNumPeriods(timeSpan, periodUnit);
-            
-
             //Определяем расписание как график Ганта
-            var plan = new Plan(proj.Workers, periodUnit, numPeriods);
+            Job[,] plan = new Job[proj.Workers.Count, proj.Late];
+            Int64 penalty = 0;
 
             //Строим расписание
-            for (int period = 0; HaveNotCompletedJob(proj) && period < numPeriods; period++)
+            for (int time = 0; HaveDidntCompleteJob(proj); time++)
             {
                 //Создаем фронт работ в данный момент времени
-                List<JobDto> front = GetReadyJobs(proj.Jobs, period);
+                Front front = new Front(proj.Jobs, time);
                 //Назанчаем работы из фронта
-                while (front.Count != 0)
+                while ((front.Jobs.Count != 0) && HaveFreeWorker(plan, time))
                 {
-                    var nextJob = GetNextJob(front);
-                    var worker = AppointJob(proj, plan, period, nextJob);
-                    if (worker == null)
-                        break;
-                    else
+                    try
                     {
-                        nextJob.TimeStart = timeStart + SetTime(periodUnit, period);
-                        var timeWork = worker.Qualifications.Where(q => q.JobType == nextJob.JobType).Select(q => q.EffectivePercent).FirstOrDefault() * nextJob.LeadTime;
-                        nextJob.TimeEnd = nextJob.TimeStart + timeWork;
-                        employmentWorker[worker] += GetNumPeriods(timeWork, periodUnit);                                                            //Добавляем нагрузку на исполнителя
+                        penalty += AppointJob(proj, plan, time, front.GetNextJob(stratagyNextJob));
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
                     }
 
-                    front = GetReadyJobs(proj.Jobs, period);
-                    //TODO добавить проверку на доступность ресурсов
+                    front = new Front(proj.Jobs, time);
                 }
             }
 
-            return new Schedule(plan);
+            return new Schedule(plan, penalty);
         }
     }
 }

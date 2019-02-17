@@ -1,35 +1,32 @@
-﻿using ScheduleApp.DataAccess.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace ScheduleCreator
+namespace ConsoleScheduleCreator
 {
-    public class Schedule
+    public struct Schedule : IPrintable
     {
-        public Plan Plan { get; }
-        public Int64 Penalty { get; }
-
-        public Schedule(Plan plan)
+        public readonly Job[,] _planner;
+        public readonly Int64 _penalty;
+        public Schedule(Job[,] planner, Int64 penalty)
         {
-            Plan = plan;
-            Penalty = GetPenalty(plan);
+            _planner = planner;
+            _penalty = penalty;
         }
-        
-        public static Int64 GetPenalty(Plan plan)
+        public void Print(IPrinter printer)
         {
-            throw new NotImplementedException();
+            StringBuilder plan = new StringBuilder();
+            for (int worker = 0; worker < _planner.GetLength(0); worker++)
+            {
+                for (int t = 0; t < _planner.GetLength(1); t++)
+                    if (_planner[worker, t] != null)
+                        plan.AppendFormat("{0} ", _planner[worker, t].Id.ToString());
+                    else plan.AppendFormat("- ");
+                plan.AppendLine();
+            }
+            printer.Print(plan + "\n Penalty: " + _penalty.ToString());
         }
-        //public void Print(IPrinter printer)
-        //{
-        //    StringBuilder plan = new StringBuilder();
-        //    for (int worker = 0; worker < _planner.GetLength(0); worker++)
-        //    {
-        //        for (int t = 0; t < _planner.GetLength(1); t++)
-        //            plan.AppendFormat("{0} ", _planner[worker, t].ToString());
-        //        plan.AppendLine();
-        //    }
-        //    printer.Print(plan + "\n Penalty: " + _penalty.ToString());
-        //}
     }
 }

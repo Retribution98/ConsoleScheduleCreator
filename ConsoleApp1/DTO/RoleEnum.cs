@@ -1,4 +1,5 @@
-﻿namespace ScheduleApp.DataAccess.DTO
+﻿namespace ConsoleScheduleCreator
+{
     public enum Role
     {
         Admin,

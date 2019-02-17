@@ -1,18 +1,16 @@
-﻿using ScheduleApp.DataAccess.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScheduleCreator
+namespace ConsoleScheduleCreator
 {
     public class GreedyStratagy : IFrontStratagy
     {
-        public JobDto GetJob(List<JobDto> jobs)
+        public Job GetJob(List<Job> jobs)
         {
-            if ((jobs == null) || (!jobs.Any()))
-                return null;
+            if (jobs == null) return null;
             jobs.Sort(
                 (x, y) =>
                 {

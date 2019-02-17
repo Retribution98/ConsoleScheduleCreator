@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScheduleApp.DataAccess.DTO
+namespace ConsoleScheduleCreator
 {
-    public class UserDto
+    public class User
     {
         /// <summary>
         /// ID пользователя
@@ -39,21 +39,21 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Квалификации пользователя
         /// </summary>
-        public List<QualificationDto> Qualifications { get; set; }
+        public List<Qualification> Qualifications { get; set; }
 
         /// <summary>
         /// Выполненные или выполняемые работы пользователем
         /// </summary>
-        public List<JobDto> Jobs { get; set; }
+        public List<Job> Jobs { get; set; }
 
         /// <summary>
         /// Управляемые проекты
         /// </summary>
-        public List<ProjectDto> ManagmentProjects { get; set; }
+        public List<Project> ManagmentProjects { get; set; }
 
         /// <summary>
         /// Проекты, в которых пользователь является работником
         /// </summary>
-        public List<ProjectDto> Projects { get; set; }
+        public List<Project> Projects { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScheduleApp.DataAccess.DTO
+namespace ConsoleScheduleCreator
 {
-    public class QualificationDto
+    public class Qualification
     {
         /// <summary>
         /// ID квалификации
@@ -19,7 +19,7 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Тип работы, на которой специализируется квалификация
         /// </summary>
-        public JobTypeDto JobType { get; set; }
+        public JobType JobType { get; set; }
 
         /// <summary>
         /// Процент эффективности работы
@@ -29,6 +29,6 @@ namespace ScheduleApp.DataAccess.DTO
         /// <summary>
         /// Исполнители, обладающие данной квалификацией
         /// </summary>
-        public List<UserDto> Users { get; set; }
+        public List<User> Users { get; set; }
     }
 }

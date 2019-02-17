@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ScheduleApp.DataAccess.DTO
+namespace ConsoleScheduleCreator
 {
-    public class JobTypeDto
+    public class JobType
     {
         /// <summary>
         /// ID Типа работ

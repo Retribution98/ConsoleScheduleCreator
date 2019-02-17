@@ -1,10 +1,18 @@
-﻿using ScheduleApp.DataAccess.DTO;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ScheduleCreator
+namespace ConsoleScheduleCreator
 {
     public interface IAlgorithm
     {
-        Schedule CreateShedule(ProjectDto proj, DateTime timeStart, DateTime timeEnd, PeriodUnit periodUnit);
+        /// <summary>
+        /// Создать расписание
+        /// </summary>
+        /// <param name="proj"></param>
+        /// <returns></returns>
+        Schedule CreateShedule(Project proj);
     }
 }
