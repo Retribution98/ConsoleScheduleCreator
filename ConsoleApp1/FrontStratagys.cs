@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    public class GreedyStratagy : IFrontStratagy
+    public interface IFrontStratagy
+    {
+        Job GetJob(List<Job> jobs);
+    }
+
+    public class FirstlyStratagy : IFrontStratagy
+    {
+        public Job GetJob(List<Job> jobs)
+        {
+            if (jobs == null) return null;
+            return jobs.First();
+        }
+    }
+
+    public class GreedyStratagy: IFrontStratagy
     {
         public Job GetJob(List<Job> jobs)
         {

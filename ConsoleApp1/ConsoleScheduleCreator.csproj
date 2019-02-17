@@ -42,24 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrontStatagy\FirstlyStratagy.cs" />
-    <Compile Include="FrontStatagy\GreedyStratagy.cs" />
-    <Compile Include="Algorithm\IAlgorithm.cs" />
-    <Compile Include="DTO\JobDto.cs" />
-    <Compile Include="DTO\JobTypeDto.cs" />
-    <Compile Include="DTO\ProjectDto.cs" />
-    <Compile Include="DTO\QualificationDto.cs" />
-    <Compile Include="DTO\UserDto.cs" />
-    <Compile Include="Algorithm\FrontAlgorithm.cs" />
-    <Compile Include="FrontStatagy\IFrontStratagy.cs" />
+    <Compile Include="Algorithms.cs" />
+    <Compile Include="FrontStratagys.cs" />
     <Compile Include="Print.cs" />
-    <Compile Include="OLD\Job.cs" />
+    <Compile Include="Job.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="OLD\Project.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DTO\RoleEnum.cs" />
-    <Compile Include="OLD\Worker.cs" />
-    <Compile Include="Schedule.cs" />
+    <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
