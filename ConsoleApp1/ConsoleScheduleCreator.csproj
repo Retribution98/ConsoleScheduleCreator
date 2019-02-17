@@ -42,14 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms.cs" />
-    <Compile Include="FrontStratagys.cs" />
+    <Compile Include="Algorithms\IAlgorithm.cs" />
+    <Compile Include="Algorithms\FrontAlgorithm.cs" />
+    <Compile Include="FrontStratagys\FirstlyStratagy.cs" />
+    <Compile Include="FrontStratagys\IFrontStratagy.cs" />
+    <Compile Include="FrontStratagys\GreedyStratagy.cs" />
     <Compile Include="Print.cs" />
-    <Compile Include="Job.cs" />
+    <Compile Include="Entities\Job.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Project.cs" />
+    <Compile Include="Entities\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Worker.cs" />
+    <Compile Include="Entities\Schedule.cs" />
+    <Compile Include="Entities\Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
