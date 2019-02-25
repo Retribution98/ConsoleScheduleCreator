@@ -13,12 +13,12 @@ namespace ConsoleScheduleCreator
         public string Name { get; }                                         //Название работы
         public int EarlyTime { get; }                                       //Раннее начало выполнения
         public int LateTime { get; }                                        //Позднее окончание выполнения
-        public int Mulct { get; }                                           //Штраф
+        public int Mulct { get; set; }                                           //Штраф
         public Int64 FinalPenalty { get; private set; }                               //Итоговый штраф
         private List<Job> Previos { get; set; }                    //Предшествующие работы
         public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
-        private int TimeStart { get; set; }                                  //Время начала выполнения работы
-        private int TimeEnd { get; set; }                                    //Время окончания выполения работы
+        public int TimeStart { get; set; }                                  //Время начала выполнения работы
+        public int TimeEnd { get; set; }                                    //Время окончания выполения работы
 
         //Методы
 
@@ -96,17 +96,16 @@ namespace ConsoleScheduleCreator
             printer.Print(this.ToString());
         }
 
-        /*public void Reset()                 //Срос планирования
-{
-   //Убираем время начала и окончания выполнения работы
-   start = -1;
-   end = -1;
-   //Обнуляем полученные штрафы
-   penalty = 0;
-   //Снимаем рабочие статусы
-   inwork = false;
-   finish = false;
-}*/
+        public void Reset()                 //Срос планирования
+        {
+            //Убираем время начала и окончания выполнения работы
+            TimeStart = -1;
+            TimeEnd = -1;
+            //Обнуляем полученные штрафы
+            FinalPenalty = 0;
+            //Снимаем рабочие статусы
+            Completed = false;
+        }
 
         /*public void AddPrevios(int amt, Job[] NewPrevios) // Добавление нескольких предшествующих работ
          {

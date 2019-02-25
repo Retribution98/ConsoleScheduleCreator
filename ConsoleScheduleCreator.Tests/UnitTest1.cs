@@ -112,7 +112,7 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
 
-            Job[,] actual = project.Schedule._planner;
+            Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
             {
                 {job1,job1,job1,job2,job2,null,null,null,null,null,job6,null,null,null,null,null,null,null,null,null },
@@ -154,7 +154,7 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
 
-            Job[,] actual = project.Schedule._planner;
+            Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
             {
                 {job1,job4,job4,job4,null,null,null,null,null,null,null,null,null,null,null },
@@ -196,7 +196,7 @@ namespace ConsoleScheduleCreator.Tests
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new GreedyStratagy()));
 
-            Job[,] actual = project.Schedule._planner;
+            Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
             {
                 {job2,job2,job2,null,null,null,null,null,null,null,null,null,null,null,null },

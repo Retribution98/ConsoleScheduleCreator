@@ -106,8 +106,43 @@ namespace ConsoleScheduleCreator
                     front = new Front(proj.Jobs, time);
                 }
             }
-
             return new Schedule(plan, penalty);
+        }
+
+        private List<Job> FindCriticalJobs(Project proj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ModifyJobs(List<Job> jobs)
+        {
+            foreach (var job in jobs)
+            {
+                job.Mulct = job.Mulct * 2;
+            }
+
+        }
+
+        public Schedule MultiAlgorihm(Project proj)
+        {
+            var schedule = CreateShedule(proj);
+            if (schedule.Penalty != 0)
+            {
+                var newSchedule = schedule;
+                do
+                {
+                    schedule = newSchedule;
+                    var criticalJobs = FindCriticalJobs(proj);
+                    ModifyJobs(criticalJobs);
+                    foreach (var job in proj.Jobs)
+                    {
+                        job.Reset();
+                    }
+                    newSchedule = CreateShedule(proj);
+                }
+                while (schedule.Penalty > newSchedule.Penalty);
+            }
+            return schedule;
         }
     }
 }
