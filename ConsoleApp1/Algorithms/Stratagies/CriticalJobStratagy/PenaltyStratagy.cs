@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.CriticalJobStratagy
 {
-    class GreedyStatagy: ICriticalJobStratagy
+    class PenaltyStratagy: ICriticalJobStratagy
     {
         public IEnumerable<Job> GetCriticalJobs(Project proj)
         {
@@ -39,9 +39,8 @@ namespace ConsoleScheduleCreator.CriticalJobStratagy
         {
             foreach (var job in jobs)
             {
-                job.Mulct = job.Mulct * 2;
+                job.Priority++;
             }
-
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ConsoleScheduleCreator
         public int NumJob { get; }
         public Dictionary<uint,int> TimeOfWork { get; }
         public int TimeInProcess { get; private set; }
+        public int Priority { get; set; }                   // Приоритет для многопроходного алгоритма
 
         //Методы
         public Worker(string _name, uint[] id_jobs, int[] time_of_work)      // Конструктор

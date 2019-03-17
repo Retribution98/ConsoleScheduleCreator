@@ -11,7 +11,7 @@ namespace ConsoleScheduleCreator.Tests.NextJobStratagyTests
         [Fact]
         void GetJobTest_Null_Null()
         {
-            var stratagy = new GreedyStratagy();
+            var stratagy = new MaxMulctStratagy();
 
             var actual = stratagy.GetJob(null);
 
@@ -21,7 +21,7 @@ namespace ConsoleScheduleCreator.Tests.NextJobStratagyTests
         [Fact]
         void GetJobTest_1Job_Job()
         {
-            var stratagy = new GreedyStratagy();
+            var stratagy = new MaxMulctStratagy();
             var jobs = new List<Job>();
             var test = new Job("Test", 1, 1, 1, 1);
             jobs.Add(test);
@@ -35,7 +35,7 @@ namespace ConsoleScheduleCreator.Tests.NextJobStratagyTests
         [Fact]
         void GetJobTest_2Job_Job2()
         {
-            var stratagy = new GreedyStratagy();
+            var stratagy = new MaxMulctStratagy();
             var jobs = new List<Job>();
             var test1 = new Job("Test", 1, 1, 1, 1);
             var test2 = new Job("Test", 2, 2, 2, 2);
@@ -52,7 +52,7 @@ namespace ConsoleScheduleCreator.Tests.NextJobStratagyTests
         [Fact]
         void GetJobTest_3Job_Job2()
         {
-            var stratagy = new GreedyStratagy();
+            var stratagy = new MaxMulctStratagy();
             var jobs = new List<Job>();
             var test1 = new Job("Test", 1, 1, 1, 1);
             var test2 = new Job("Test", 2, 2, 2, 2);

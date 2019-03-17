@@ -1,4 +1,4 @@
-﻿using ConsoleScheduleCreator.Algorithms.SheduleClasses;
+﻿using ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy;
 using ConsoleScheduleCreator.Entities;
 using ConsoleScheduleCreator.NextJobStratagies;
 using System;
@@ -7,33 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleScheduleCreator
+namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 {
-    class JobsDirectiveTime: ISheduleClass
+    class EqualWorker: ISheduleClass
     {
         private readonly IGetWorkerStratagy _getWorkerStratagy;
         private readonly INextJobStratagy _nextJobStratagy;
         private readonly ICriticalJobStratagy _criticalJobStratagy;
 
-        public JobsDirectiveTime(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, ICriticalJobStratagy criticalJobStratagy = null)
+        public EqualWorker(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, ICriticalJobStratagy criticalJobStratagy = null)
         {
-            _getWorkerStratagy = getWorkerStratagy ?? new GetWorkerStratagy.MinTimeOfWork();
-            _nextJobStratagy = nextJobStratagy ?? new NextJobStratagies.MaxMulctStratagy();
-            _criticalJobStratagy = criticalJobStratagy ?? new CriticalJobStratagy.GreedyStatagy();
-        }
-
-        public long GetPenalty(Project proj,  Plan plan)
-        {
-            var penalty = 0L;
-            foreach (var job in proj.Jobs)
-            {
-                if (job.Completed == true)
-                {
-                    penalty += job.FinalPenalty;
-                }
-                else penalty += job.Mulct * plan.Time;
-            }
-            return penalty;
+            _getWorkerStratagy = getWorkerStratagy ?? new EqualTimeInProces();
+            _nextJobStratagy = nextJobStratagy ?? new FirstlyStratagy();
+            _criticalJobStratagy = criticalJobStratagy;
         }
 
         public Job GetJob(List<Job> jobs)
@@ -59,6 +45,11 @@ namespace ConsoleScheduleCreator
         public void ModifyJobs(IEnumerable<Job> jobs)
         {
             _criticalJobStratagy.ModifyJobs(jobs);
+        }
+
+        public long GetPenalty(Project proj, Plan plan)
+        {
+            throw new NotImplementedException();
         }
     }
 }

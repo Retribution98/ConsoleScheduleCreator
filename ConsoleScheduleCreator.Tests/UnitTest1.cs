@@ -40,7 +40,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
@@ -82,7 +82,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
@@ -124,7 +124,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.GreedyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.MaxMulctStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =

@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.GetWorkerStratagy
 {
-    public class GreedyStatagy :IGetWorkerStratagy
+    public class MinTimeOfWork :IGetWorkerStratagy
     {
         public Worker GetWorker(Job job, Plan plan, int time)
         {
             var selectWorker = plan.Workers
                 .Where(w => plan[w, time] == null)
                 .OrderBy(w => w.TimeOfWork[job.Id])
-                .ThenBy(w => w.TimeInProcess)
                 .FirstOrDefault();
 
             return selectWorker;

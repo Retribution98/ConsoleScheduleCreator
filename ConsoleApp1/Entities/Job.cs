@@ -19,7 +19,7 @@ namespace ConsoleScheduleCreator
         public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
         public int TimeStart { get; set; }                                  //Время начала выполнения работы
         public int TimeEnd { get; set; }                                    //Время окончания выполения работы
-
+        public int Priority { get; set; }                       // Приоритет для многпороходного алгоритма
         //Методы
 
         //Конструктор с заданным именем, временем раннего начала и познего окнчания выполнения, а так же штрафом

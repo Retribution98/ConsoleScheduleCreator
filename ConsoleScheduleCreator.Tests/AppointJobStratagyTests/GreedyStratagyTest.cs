@@ -12,7 +12,7 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
         [Fact]
         public void AppointJob_1Job_CompleteTrue()
         {
-            var stratagy = new GetWorkerStratagy.GreedyStatagy();
+            var stratagy = new GetWorkerStratagy.MinTimeOfWork();
 
             var job1 = new Job("Test", 1, 1, 10, 10);
             var plan = new Job[1, 5];
@@ -43,7 +43,7 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
         [Fact]
         public void AppointJob_1Job_AddProcessForWorker()
         {
-            var stratagy = new GetWorkerStratagy.GreedyStatagy();
+            var stratagy = new GetWorkerStratagy.MinTimeOfWork();
 
             var jobs = new List<Job>();
             var job1 = new Job("Test", 1, 1, 1, 10);
@@ -64,7 +64,7 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
         [Fact]
         public void AppointJob_1Job_AddToPlan()
         {
-            var stratagy = new GetWorkerStratagy.GreedyStatagy();
+            var stratagy = new GetWorkerStratagy.MinTimeOfWork();
 
             var jobs = new List<Job>();
             var job1 = new Job("Test", 1, 1, 1, 10);
