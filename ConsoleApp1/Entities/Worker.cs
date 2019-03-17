@@ -30,18 +30,22 @@ namespace ConsoleScheduleCreator
         }
         public override string ToString()
         {
-            StringBuilder msg = new StringBuilder("Имя: " + Name + "\n");
+            StringBuilder msg = new StringBuilder($"Имя: {Name}\n");
             foreach (KeyValuePair<uint,int> duo in TimeOfWork)
-                msg.AppendFormat("№" + duo.Key + ": " + duo.Value + "   ");
+                msg.Append($"№{duo.Key}: {duo.Value}   ");
             return msg.ToString();
         }
         public void Print(IPrinter printer)
         {
-            printer.Print(this.ToString());
+            printer.PrintLn(this.ToString());
         }
         public void AddProcess (uint id_job)
         {
             TimeInProcess += TimeOfWork[id_job];
+        }
+        public void Reset()
+        {
+            TimeInProcess = 0;
         }
     }
 

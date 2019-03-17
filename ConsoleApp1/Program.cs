@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using ConsoleScheduleCreator.Algorithms;
+using System;
 
 namespace ConsoleScheduleCreator
 {
@@ -11,7 +7,7 @@ namespace ConsoleScheduleCreator
     {
         static void Main(string[] args)
         {
-            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data2.xlsx");
+            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
             if (proj == null)
             {
                 System.GC.Collect();
@@ -21,9 +17,13 @@ namespace ConsoleScheduleCreator
 
             PrinterToConsole printerToConsole = new PrinterToConsole();
             proj.Print(printerToConsole);
-            proj.CreateSchedule(new FrontAlgorithm(new GreedyStratagy()));
+            proj.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), printerToConsole));
             proj.Schedule.Print(printerToConsole);
-            
+            Console.WriteLine("_______________________________________________________");
+            proj.Reset();
+            proj.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), printerToConsole));
+            proj.Schedule.Print(printerToConsole);
+
             Console.Read();
         }
  

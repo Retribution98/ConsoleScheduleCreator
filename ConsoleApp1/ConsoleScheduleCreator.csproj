@@ -42,11 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\SheduleClasses\ISheduleClass.cs" />
+    <Compile Include="Entities\Front.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Algorithms\FrontAlgorithm.cs" />
-    <Compile Include="FrontStratagys\FirstlyStratagy.cs" />
-    <Compile Include="FrontStratagys\IFrontStratagy.cs" />
-    <Compile Include="FrontStratagys\GreedyStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\CriticalJobStratagy\GreedyStatagy.cs" />
+    <Compile Include="Algorithms\Stratagies\CriticalJobStratagy\ICriticalJobStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\GreedyStatagy.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\IGetWorkerStratagy.cs" />
+    <Compile Include="Entities\Plan.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagys\FirstlyStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagys\INextJobStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagys\GreedyStratagy.cs" />
     <Compile Include="Print.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Program.cs" />
@@ -54,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Schedule.cs" />
     <Compile Include="Entities\Worker.cs" />
+    <Compile Include="Algorithms\SheduleClasses\JobsDirectiveTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System.Reflection; //чтение данных из файлов Excel
 using Excel = Microsoft.Office.Interop.Excel;
+using ConsoleScheduleCreator.Algorithms;
+
 namespace ConsoleScheduleCreator
 {
     public class Project:IPrintable
@@ -165,8 +167,10 @@ namespace ConsoleScheduleCreator
 
         public void Print(IPrinter printer)
         {
-            string msg = "\nНазвание проекта: " + Name + "\nКоличество работ: " + Jobs.Count + "\tКоличество работников: " + Workers.Count + "\nРаботы: \n";
-            printer.Print(msg);
+            printer.PrintLn($"Название проекта: {Name}");
+            printer.PrintLn($"Количество работ: {Jobs.Count}");
+            printer.PrintLn($"Количество работников: {Workers.Count}");
+            printer.PrintLn("Работы:");
             foreach (Job job in Jobs)
             {
                 job.Print(printer);
@@ -180,15 +184,23 @@ namespace ConsoleScheduleCreator
 
         public void CreateSchedule(IAlgorithm algorithm)
         {
-            Schedule =  algorithm.CreateShedule(this);
+            Schedule = algorithm.CreateShedule(this);
         }
-        /*public void Reset()                         //Сброс планирования проекта
+        public void MultiAlgorihm(IAlgorithm algorithm)
         {
-            foreach(Job job in Jobs)
+            Schedule = algorithm.MultiAlgorihm(this);
+        }
+        public void Reset()                         //Сброс планирования проекта
+        {
+            foreach (Job job in Jobs)
             {
                 job.Reset();     //Сбрасывает параметры выполнения у работы
             }
-        }*/
+            foreach (var worker in Workers)
+            {
+                worker.Reset();
+            }
+        }
 
         //public void AddJob(string name, int early, int late, int mulct, int numPrevios, int[] previos)         //Добавляем множество работ в проект
         //{

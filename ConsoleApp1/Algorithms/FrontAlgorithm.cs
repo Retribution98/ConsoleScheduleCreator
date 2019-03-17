@@ -1,69 +1,26 @@
-﻿using System;
+﻿using ConsoleScheduleCreator.Algorithms.SheduleClasses;
+using ConsoleScheduleCreator.Entities;
+using ConsoleScheduleCreator.NextJobStratagies;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleScheduleCreator
+namespace ConsoleScheduleCreator.Algorithms
 {
     public class FrontAlgorithm : IAlgorithm
     {
-        class Front
-        {
-            public List<Job> Jobs { get; }
+        private readonly ISheduleClass _sheduleClass;
+        private readonly IPrinter _printer;
 
-            public Front(List<Job> jobs, int time)
-            {
-                if (jobs != null)
-                {
-                    Jobs = new List<Job>();
-                    foreach (Job job in jobs)
-                    {
-                        if (job.Ready(time))
-                        {
-                            Jobs.Add(job);
-                        }
-                    }
-                }
-            }
-            public Job GetNextJob(IFrontStratagy stratagyNextJob)
-            {
-                return stratagyNextJob.GetJob(Jobs);
-            }
+        public FrontAlgorithm(ISheduleClass sheduleClass, IPrinter printer)
+        {
+            _sheduleClass = sheduleClass;
+            _printer = printer;
         }
 
-        readonly IFrontStratagy stratagyNextJob;
-
-        public FrontAlgorithm(IFrontStratagy stratagy)
-        {
-            stratagyNextJob = stratagy;
-        }
-
-        Int64 AppointJob(Project proj, Job[,] plan, int time, Job job)
-        {
-            //Соотношение между Работником и порядковым номером в проекте
-            Dictionary<Worker, int> numerationWorkers = new Dictionary<Worker, int>();
-            for (int index = 0; index < proj.Workers.Count; index++)
-            {
-                numerationWorkers.Add(proj.Workers[index], index);
-            }
-
-            var sortByTime = from worker in proj.Workers
-                             where plan[numerationWorkers[worker], time] == null
-                             orderby worker.TimeOfWork[job.Id], worker.TimeInProcess
-                             select worker;
-
-            if (sortByTime.Count() == 0) throw new OperationCanceledException("Haven't ready worker");
-            Worker bestWorker = sortByTime.First();
-
-            for (int l = 0; l < bestWorker.TimeOfWork[job.Id]; l++)                                      //Заполняем план для исполнителя с минимальным временм исполнения
-                plan[numerationWorkers[bestWorker], time + l] = job;
-            job.Complete(time, time + bestWorker.TimeOfWork[job.Id] - 1);             //Выполняем работу с такой-то по такой такт
-            bestWorker.AddProcess(job.Id);                                                            //Добавляем нагрузку на исполнителя
-
-            return job.FinalPenalty;
-        }
-        bool HaveDidntCompleteJob(Project proj)
+        private bool HaveDidntCompleteJob(Project proj)
         {
             foreach (Job job in proj.Jobs)
             {
@@ -71,77 +28,54 @@ namespace ConsoleScheduleCreator
             }
             return false;
         }
-        bool HaveFreeWorker(Job[,] plan, int time)
-        {
-            for (int worker = 0; worker < plan.GetLength(0); worker++)
-            {
-                if (plan[worker, time] == null)
-                    return true;
-            }
-            return false;
-        }
+
         public Schedule CreateShedule(Project proj)
         {
             //Определяем расписание как график Ганта
-            Job[,] plan = new Job[proj.Workers.Count, proj.Late];
-            Int64 penalty = 0;
+            var plan = new Plan(proj.Workers, proj.Late);
 
             //Строим расписание
             for (int time = 0; HaveDidntCompleteJob(proj); time++)
             {
                 //Создаем фронт работ в данный момент времени
                 Front front = new Front(proj.Jobs, time);
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                _printer.Print($"Front in {time}: ");
+                _printer.PrintLn(String.Join(", ", front.Jobs.Select(j => j.Id)));
+                Console.ResetColor();
                 //Назанчаем работы из фронта
-                while ((front.Jobs.Count != 0) && HaveFreeWorker(plan, time))
+                while ((front.Jobs.Count != 0) && plan.HaveFreeWorker(time))
                 {
-                    try
-                    {
-                        penalty += AppointJob(proj, plan, time, front.GetNextJob(stratagyNextJob));
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        break;
-                    }
-
+                    var job = front.GetNextJob(_sheduleClass);
+                    var worker = _sheduleClass.GetWorker(job, plan, time);
+                    plan.AppointJob(job, worker, time);
                     front = new Front(proj.Jobs, time);
                 }
             }
+            var penalty = _sheduleClass.GetPenalty(proj, plan);
             return new Schedule(plan, penalty);
-        }
-
-        private List<Job> FindCriticalJobs(Project proj)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ModifyJobs(List<Job> jobs)
-        {
-            foreach (var job in jobs)
-            {
-                job.Mulct = job.Mulct * 2;
-            }
-
         }
 
         public Schedule MultiAlgorihm(Project proj)
         {
             var schedule = CreateShedule(proj);
-            if (schedule.Penalty != 0)
+            var newSchedule = schedule;
+            do
             {
-                var newSchedule = schedule;
-                do
-                {
-                    schedule = newSchedule;
-                    var criticalJobs = FindCriticalJobs(proj);
-                    ModifyJobs(criticalJobs);
-                    foreach (var job in proj.Jobs)
-                    {
-                        job.Reset();
-                    }
-                    newSchedule = CreateShedule(proj);
-                }
-                while (schedule.Penalty > newSchedule.Penalty);
+                schedule = newSchedule;
+                var criticalJobs = _sheduleClass.GetCriticalJobs(proj);
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Black;
+                _printer.PrintLn("Critical jobs:" + String.Join(", ", criticalJobs.Select(j => j.Id)));
+                Console.ResetColor();
+                _sheduleClass.ModifyJobs(criticalJobs);
+                proj.Reset();
+                newSchedule = CreateShedule(proj);
+                _printer.PrintLn("//////////");
+                newSchedule.Print(_printer);
+                _printer.PrintLn("\\\\\\\\\\");
             }
+            while (schedule.Penalty > newSchedule.Penalty);
             return schedule;
         }
     }

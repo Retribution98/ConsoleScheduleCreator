@@ -15,7 +15,7 @@ namespace ConsoleScheduleCreator
         public int LateTime { get; }                                        //Позднее окончание выполнения
         public int Mulct { get; set; }                                           //Штраф
         public Int64 FinalPenalty { get; private set; }                               //Итоговый штраф
-        private List<Job> Previos { get; set; }                    //Предшествующие работы
+        public  List<Job> Previos { get; set; }                    //Предшествующие работы
         public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
         public int TimeStart { get; set; }                                  //Время начала выполнения работы
         public int TimeEnd { get; set; }                                    //Время окончания выполения работы
@@ -81,19 +81,18 @@ namespace ConsoleScheduleCreator
 
         public override string ToString()
         {
-            StringBuilder msg = new StringBuilder("Id: " + Id + "\t Name: " + Name + "\t Раннее начало: " + EarlyTime + "\t Позднее окончание: " + LateTime + "\nПредшественники: ");
+            StringBuilder msg = new StringBuilder("Id: " + Id + "\t Name: " + Name + "\t Раннее начало: " + EarlyTime + "\t Позднее окончание: " + LateTime + "\tПредшественники: ");
             if (Previos.Count != 0)
-                foreach (Job prev in Previos)
-                {
-                    msg.AppendFormat(prev.Id + ", ");
-                }
+            {
+                msg.Append(String.Join(", ", Previos.Select(j => j.Id)));
+            }
             else msg.AppendFormat("отсутствуют");
             return msg.ToString();
         }
 
         public void Print(IPrinter printer)
         {
-            printer.Print(this.ToString());
+            printer.PrintLn(this.ToString());
         }
 
         public void Reset()                 //Срос планирования

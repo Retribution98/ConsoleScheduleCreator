@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleScheduleCreator
+namespace ConsoleScheduleCreator.NextJobStratagies
 {
-    public interface IFrontStratagy
+    public interface INextJobStratagy
     {
         Job GetJob(List<Job> jobs);
     }

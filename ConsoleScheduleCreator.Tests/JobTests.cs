@@ -186,7 +186,7 @@ namespace ConsoleScheduleCreator.Tests
             job.AddPrevios(previos1);
             job.AddPrevios(previos2);
 
-            string expected = "Id: 1\t Name: Test\t Раннее начало: 0\t Позднее окончание: 100\nПредшественники: 2, 3, ";
+            string expected = "Id: 1\t Name: Test\t Раннее начало: 0\t Позднее окончание: 100\tПредшественники: 2, 3";
             string actual = job.ToString();
 
             Assert.Equal(expected, actual);
@@ -197,7 +197,7 @@ namespace ConsoleScheduleCreator.Tests
         {
             Job job = new Job("Test", 1, 0, 100, 10);
             
-            string expected = "Id: 1\t Name: Test\t Раннее начало: 0\t Позднее окончание: 100\nПредшественники: отсутствуют";
+            string expected = "Id: 1\t Name: Test\t Раннее начало: 0\t Позднее окончание: 100\tПредшественники: отсутствуют";
             string actual = job.ToString();
 
             Assert.Equal(expected, actual);

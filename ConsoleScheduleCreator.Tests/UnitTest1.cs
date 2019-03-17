@@ -1,3 +1,4 @@
+using ConsoleScheduleCreator.Algorithms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,77 +8,6 @@ namespace ConsoleScheduleCreator.Tests
 {
     public class ProjectTests
     {
-        
-        //    [Fact]
-        //    public void PenaltyProjectTest_CompletedJobs()
-        //    {
-        //        Job job1 = new Job("First", 1, 0, 5, 2);
-        //        job1.Complete(0, 10);
-        //        Job job2 = new Job("Second", 2, 0, 5, 2);
-        //        job2.Complete(0, 10);
-        //        Job job3 = new Job("Third", 3, 0, 5, 2);
-        //        job3.Complete(0, 10);
-        //        List<Job> jobs = new List<Job>() { job1, job2, job3 };
-        //        string[] workersName = new string[0];
-        //        int[,] workersTime = new int[0,0];
-        //        Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-
-        //        Int64 actual = project.PenaltyProject(20);
-        //        Int64 expected = 30;
-
-        //        Assert.Equal(expected, actual);
-        //    }
-
-        //    [Fact]
-        //    public void PenaltyProjectTest_1JobsNotCompleted()
-        //    {
-        //        Job job1 = new Job("First", 1, 0, 5, 2);
-        //        job1.Complete(0, 10);
-        //        Job job2 = new Job("Second", 2, 0, 5, 2);
-        //        job2.Complete(0, 10);
-        //        Job job3 = new Job("Third", 3, 0, 5, 2);
-        //        List<Job> jobs = new List<Job>() { job1, job2, job3 };
-        //        string[] workersName = new string[0];
-        //        int[,] workersTime = new int[0, 0];
-        //        Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-
-        //        Int64 actual = project.PenaltyProject(20);
-        //        Int64 expected = 50;
-
-        //        Assert.Equal(expected, actual);
-        //    }
-
-        //    [Fact]
-        //    public void PenaltyProjectTest_StartTime()
-        //    {
-        //        Job job1 = new Job("First", 1, 0, 5, 2);
-        //        Job job2 = new Job("Second", 2, 0, 5, 2);
-        //        Job job3 = new Job("Third", 3, 0, 5, 2);
-        //        List<Job> jobs = new List<Job>() { job1, job2, job3 };
-        //        string[] workersName = new string[0];
-        //        int[,] workersTime = new int[0, 0];
-        //        Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-
-        //        Int64 actual = project.PenaltyProject(0);
-        //        Int64 expected = 0;
-
-        //        Assert.Equal(expected, actual);
-        //    }
-
-        //    [Fact]
-        //    public void PenaltyProjectTest_HaveNotJobs()
-        //    {
-        //        List<Job> jobs = new List<Job>();
-        //        string[] workersName = new string[0];
-        //        int[,] workersTime = new int[0, 0];
-        //        Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-
-        //        Int64 actual = project.PenaltyProject(20);
-        //        Int64 expected = 0;
-
-        //        Assert.Equal(expected, actual);
-        //}
-
         [Fact]
         public void CreateScheduleTests_Proj1_FrontAlgorithm_FirstlyStratagy()
         {
@@ -110,7 +40,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
@@ -152,7 +82,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new FirstlyStratagy()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
@@ -194,7 +124,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new GreedyStratagy()));
+            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.GreedyStratagy(), new GetWorkerStratagy.GreedyStatagy(), null, new PrinterToConsole()));
 
             Job[,] actual = project.Schedule.Planner;
             Job[,] expected =
