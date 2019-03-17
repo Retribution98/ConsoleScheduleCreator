@@ -46,6 +46,7 @@ namespace ConsoleScheduleCreator.Entities
             Console.ResetColor();
             Console.WriteLine();
             var leadTime = worker.TimeOfWork[job.Id];
+            //job.FinalPenalty = job.GetPenaltyForTime(time + leadTime - 1);
             job.Complete(time, time + leadTime - 1);
             worker.AddProcess(job.Id);
             for (var delta = 0; delta < leadTime; delta++)

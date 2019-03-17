@@ -44,12 +44,13 @@
   <ItemGroup>
     <Compile Include="Algorithms\SheduleClasses\EqualWorker.cs" />
     <Compile Include="Algorithms\SheduleClasses\ISheduleClass.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagy\CriticalWorkersStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\EqualTimeInProces.cs" />
     <Compile Include="Entities\Front.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Algorithms\FrontAlgorithm.cs" />
-    <Compile Include="Algorithms\Stratagies\CriticalJobStratagy\PenaltyStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\CriticalJobStratagy\ICriticalJobStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagy\CriticalJobsStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagy\IModifyStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\MinTimeOfWork.cs" />
     <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\IGetWorkerStratagy.cs" />
     <Compile Include="Entities\Plan.cs" />

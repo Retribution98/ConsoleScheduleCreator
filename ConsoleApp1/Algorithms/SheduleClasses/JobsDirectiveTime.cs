@@ -1,4 +1,5 @@
 ﻿using ConsoleScheduleCreator.Algorithms.SheduleClasses;
+using ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy;
 using ConsoleScheduleCreator.Entities;
 using ConsoleScheduleCreator.NextJobStratagies;
 using System;
@@ -9,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    class JobsDirectiveTime: ISheduleClass
+    public class JobsDirectiveTime: ISheduleClass
     {
         private readonly IGetWorkerStratagy _getWorkerStratagy;
         private readonly INextJobStratagy _nextJobStratagy;
-        private readonly ICriticalJobStratagy _criticalJobStratagy;
+        private readonly IModifyStratagy _modifyStratagy;
 
-        public JobsDirectiveTime(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, ICriticalJobStratagy criticalJobStratagy = null)
+        public JobsDirectiveTime(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, IModifyStratagy criticalJobStratagy = null)
         {
             _getWorkerStratagy = getWorkerStratagy ?? new GetWorkerStratagy.MinTimeOfWork();
             _nextJobStratagy = nextJobStratagy ?? new NextJobStratagies.MaxMulctStratagy();
-            _criticalJobStratagy = criticalJobStratagy ?? new CriticalJobStratagy.GreedyStatagy();
+            _modifyStratagy = criticalJobStratagy ?? new PenaltyStratagy();
         }
 
         public long GetPenalty(Project proj,  Plan plan)
@@ -46,19 +47,9 @@ namespace ConsoleScheduleCreator
             return _getWorkerStratagy.GetWorker(job, plan, time);
         }
 
-        public IEnumerable<Job> GetCriticalJobs(Project proj)
+        public void ModifyProject(Project project)
         {
-            return _criticalJobStratagy.GetCriticalJobs(proj);
-        }
-
-        public IEnumerable<Job> GetCriticalJobs(Job proj)
-        {
-            return _criticalJobStratagy.GetCriticalJobs(proj);
-        }
-
-        public void ModifyJobs(IEnumerable<Job> jobs)
-        {
-            _criticalJobStratagy.ModifyJobs(jobs);
+            _modifyStratagy.ModifyProject(project);
         }
     }
 }

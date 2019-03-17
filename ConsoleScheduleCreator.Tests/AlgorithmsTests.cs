@@ -12,7 +12,7 @@ namespace ConsoleScheduleCreator.Tests
         [Fact]
         public void HaveNotCompletedJob_1Job_True()
         {
-            var obj = new FrontAlgorithm(null, null, null, null);
+            var obj = new FrontAlgorithm(null, null);
             var t = typeof(FrontAlgorithm);
 
             var jobs = new List<Job>();
@@ -36,7 +36,7 @@ namespace ConsoleScheduleCreator.Tests
         [Fact]
         public void HaveNotCompletedJob_1CompletedJob_False()
         {
-            var obj = new FrontAlgorithm(null, null, null, null);
+            var obj = new FrontAlgorithm(null, null);
             var t = typeof(FrontAlgorithm);
 
             var jobs = new List<Job>();

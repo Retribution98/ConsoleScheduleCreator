@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleScheduleCreator.CriticalJobStratagy
+namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
-    class PenaltyStratagy: ICriticalJobStratagy
+    class PenaltyStratagy: IModifyStratagy
     {
-        public IEnumerable<Job> GetCriticalJobs(Project proj)
+        private IEnumerable<Job> GetCriticalJobs(Project proj)
         {
             var lastJob = proj.Jobs.First();
             foreach (var job in proj.Jobs)
@@ -20,7 +20,7 @@ namespace ConsoleScheduleCreator.CriticalJobStratagy
             return result;
         }
 
-        public IEnumerable<Job> GetCriticalJobs(Job job)
+        private IEnumerable<Job> GetCriticalJobs(Job job)
         {
             var criticalPrev = job.Previos.Where(j => j.TimeEnd == job.TimeStart - 1 && j.TimeStart != j.EarlyTime).ToList();
             if (criticalPrev.Any())
@@ -35,9 +35,14 @@ namespace ConsoleScheduleCreator.CriticalJobStratagy
             }
         }
 
-        public void ModifyJobs(IEnumerable<Job> jobs)
+        public void ModifyProject(Project project)
         {
-            foreach (var job in jobs)
+            var criticalJobs = GetCriticalJobs(project);
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("Critical jobs:" + String.Join(", ", criticalJobs.Select(j => j.Id)));
+            Console.ResetColor();
+            foreach (var job in criticalJobs)
             {
                 job.Priority++;
             }

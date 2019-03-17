@@ -1,4 +1,5 @@
 ﻿using ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy;
+using ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy;
 using ConsoleScheduleCreator.Entities;
 using ConsoleScheduleCreator.NextJobStratagies;
 using System;
@@ -9,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 {
-    class EqualWorker: ISheduleClass
+    public class EqualWorker: ISheduleClass
     {
         private readonly IGetWorkerStratagy _getWorkerStratagy;
         private readonly INextJobStratagy _nextJobStratagy;
-        private readonly ICriticalJobStratagy _criticalJobStratagy;
+        private readonly IModifyStratagy _modifyStratagy;
 
-        public EqualWorker(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, ICriticalJobStratagy criticalJobStratagy = null)
+        public EqualWorker(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, IModifyStratagy criticalJobStratagy = null)
         {
             _getWorkerStratagy = getWorkerStratagy ?? new EqualTimeInProces();
             _nextJobStratagy = nextJobStratagy ?? new FirstlyStratagy();
-            _criticalJobStratagy = criticalJobStratagy;
+            _modifyStratagy = criticalJobStratagy ?? new CriticalWorkersStratagy();
         }
 
         public Job GetJob(List<Job> jobs)
@@ -32,24 +33,14 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
             return _getWorkerStratagy.GetWorker(job, plan, time);
         }
 
-        public IEnumerable<Job> GetCriticalJobs(Project proj)
-        {
-            return _criticalJobStratagy.GetCriticalJobs(proj);
-        }
-
-        public IEnumerable<Job> GetCriticalJobs(Job proj)
-        {
-            return _criticalJobStratagy.GetCriticalJobs(proj);
-        }
-
-        public void ModifyJobs(IEnumerable<Job> jobs)
-        {
-            _criticalJobStratagy.ModifyJobs(jobs);
-        }
-
         public long GetPenalty(Project proj, Plan plan)
         {
             throw new NotImplementedException();
+        }
+
+        public void ModifyProject(Project project)
+        {
+            _modifyStratagy.ModifyProject(project);
         }
     }
 }

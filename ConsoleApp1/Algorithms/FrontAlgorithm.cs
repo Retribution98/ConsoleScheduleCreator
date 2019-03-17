@@ -63,12 +63,8 @@ namespace ConsoleScheduleCreator.Algorithms
             do
             {
                 schedule = newSchedule;
-                var criticalJobs = _sheduleClass.GetCriticalJobs(proj);
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.ForegroundColor = ConsoleColor.Black;
-                _printer.PrintLn("Critical jobs:" + String.Join(", ", criticalJobs.Select(j => j.Id)));
-                Console.ResetColor();
-                _sheduleClass.ModifyJobs(criticalJobs);
+                
+                _sheduleClass.ModifyProject(proj);
                 proj.Reset();
                 newSchedule = CreateShedule(proj);
                 _printer.PrintLn("//////////");

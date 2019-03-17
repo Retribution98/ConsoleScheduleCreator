@@ -1,4 +1,5 @@
 using ConsoleScheduleCreator.Algorithms;
+using ConsoleScheduleCreator.GetWorkerStratagy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,17 +41,21 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
-
-            Job[,] actual = project.Schedule.Planner;
-            Job[,] expected =
+            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
+            var actual = project.Schedule.Planner;
+            var expected = new Job[,]
             {
-                {job1,job1,job1,job2,job2,null,null,null,null,null,job6,null,null,null,null,null,null,null,null,null },
-                {null,null,null,job4,job4,job4,null,null,job5,job5,null,null,null,null,null,job8,job8,job8,null,null },
-                {null,null,null,null,null,job3,job3,job3,null,null,null,null,job7,job7,job7,null,null,null,null,null }
+                {job1,job1,job1,job2,job2,job3,job3,job3,null,null,job6,null,null,null,null,job8,job8,job8,null,null },
+                {null,null,null,job4,job4,job4,null,null,job5,job5,null,null,null,null,null,null,null,null,null,null },
+                {null,null,null,null,null,null,null,null,null,null,null,null,job7,job7,job7,null,null,null,null,null }
             };
 
-            Assert.Equal(expected, actual);
+            for (var i = 0; i < project.Workers.Count; i++)
+            {
+                var worker = project.Workers[i];
+                for (var t = 0; t < project.Late; t++)
+                    Assert.Equal(expected[i, t], actual[worker, t]);
+            }
         }
 
         [Fact]
@@ -82,17 +87,22 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.FirstlyStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
 
-            Job[,] actual = project.Schedule.Planner;
-            Job[,] expected =
+            var actual = project.Schedule.Planner;
+            var expected = new Job[,]
             {
                 {job1,job4,job4,job4,null,null,null,null,null,null,null,null,null,null,null },
-                {job3,job3,job3,job3,job3,job3,job3,job3,null,null,job7,job7,null,null,null },
-                {job2,job2,job2,job2,job5,job5,job5,null,job6,job6,null,null,job8,job8,null }
+                {job3,job3,job3,job3,job3,job3,job3,job3,job6,job6,job7,job7,job8,job8,null },
+                {job2,job2,job2,job2,job5,job5,job5,null,null,null,null,null,null,null,null }
             };
 
-            Assert.Equal(expected, actual);
+            for (var i =0; i < project.Workers.Count; i++)
+            {
+                var worker = project.Workers[i];
+                for (var t = 0; t < project.Late; t++)
+                    Assert.Equal(expected[i,t], actual[worker, t]);
+            }
         }
 
         [Fact]
@@ -124,17 +134,22 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new NextJobStratagies.MaxMulctStratagy(), new GetWorkerStratagy.MinTimeOfWork(), null, new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
 
-            Job[,] actual = project.Schedule.Planner;
-            Job[,] expected =
+            var actual = project.Schedule.Planner;
+            var expected = new Job[,]
             {
                 {job2,job2,job2,null,null,null,null,null,null,null,null,null,null,null,null },
                 {job4,null,null,job5,job5,job7,job7,job8,job8,null,null,null,null,null,null },
                 {job1,job3,job3,job6,job6,null,null,null,null,null,null,null,null,null,null }
             };
 
-            Assert.Equal(expected, actual);
+            for (var i = 0; i < project.Workers.Count; i++)
+            {
+                var worker = project.Workers[i];
+                for (var t = 0; t < project.Late; t++)
+                    Assert.Equal(expected[i, t], actual[worker, t]);
+            }
         }
 
     }
