@@ -10,8 +10,7 @@ namespace ConsoleScheduleCreator.NextJobStratagies
     {
         public Job GetJob(List<Job> jobs)
         {
-            if (jobs == null) return null;
-            return jobs.First();
+            return jobs != null ? jobs.FirstOrDefault() : null;
         }
     }
 }

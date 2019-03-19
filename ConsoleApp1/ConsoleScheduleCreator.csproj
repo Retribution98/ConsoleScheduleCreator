@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\SheduleClasses\EqualWorker.cs" />
     <Compile Include="Algorithms\SheduleClasses\ISheduleClass.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\FirstlyStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\ModifyStratagy\CriticalWorkersStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\EqualTimeInProces.cs" />
     <Compile Include="Entities\Front.cs" />

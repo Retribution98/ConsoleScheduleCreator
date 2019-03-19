@@ -19,7 +19,7 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
         public EqualWorker(IGetWorkerStratagy getWorkerStratagy = null, INextJobStratagy nextJobStratagy = null, IModifyStratagy criticalJobStratagy = null)
         {
             _getWorkerStratagy = getWorkerStratagy ?? new EqualTimeInProces();
-            _nextJobStratagy = nextJobStratagy ?? new FirstlyStratagy();
+            _nextJobStratagy = nextJobStratagy ?? new NextJobStratagies.FirstlyStratagy();
             _modifyStratagy = criticalJobStratagy ?? new CriticalWorkersStratagy();
         }
 
@@ -35,7 +35,9 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 
         public long GetPenalty(Project proj, Plan plan)
         {
-            throw new NotImplementedException();
+            var maxTimeInProcess = plan.Workers.Max(w => w.TimeInProcess);
+            var minTimeInProcess = plan.Workers.Min(w => w.TimeInProcess);
+            return (long)maxTimeInProcess - minTimeInProcess;
         }
 
         public void ModifyProject(Project project)
