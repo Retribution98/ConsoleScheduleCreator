@@ -11,12 +11,22 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy
     {
         public Worker GetWorker(Job job, Plan plan, int time)
         {
-            var selectWorker = plan.Workers
+            var freestWorkers = plan.Workers
                 .Where(w => plan[w, time] == null)
-                .OrderBy(w => w.TimeInProcess)
+                .OrderBy(w => w.TimeInProcess);
+            var chanceArray = new List<Worker>();
+            foreach (var worker in freestWorkers)
+            {
+                for (var i = 0; i<worker.Priority; i++)
+                {
+                    chanceArray.Add(worker);
+                }
+            }
+            var random = new Random();
+            return chanceArray
+                .Skip(random.Next(chanceArray.Count))
+                .Take(1)
                 .FirstOrDefault();
-
-            return selectWorker;
         }
     }
 }
