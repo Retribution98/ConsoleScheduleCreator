@@ -10,8 +10,8 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
     {
         public void ModifyProject(Project project)
         {
-            var maxValue = project.Workers.Max(w => w.TimeInProcess);
-            project.Workers.ForEach(w => w.Priority = maxValue - w.TimeInProcess + 1);
+            var maxValue = project.Workers.Max(w => project.Schedule.Planner.GetTimeInProcess(w));
+            project.Workers.ForEach(w => w.Priority = maxValue - project.Schedule.Planner.GetTimeInProcess(w) + 1);
         }
     }
 }

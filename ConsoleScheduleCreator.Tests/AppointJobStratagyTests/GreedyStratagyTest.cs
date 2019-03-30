@@ -48,7 +48,7 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
 
             plan.AppointJob(job1, proj.Workers.Where(x => x.Name == "Petya").FirstOrDefault(), 1);
 
-            int actual = proj.Workers[1].TimeInProcess;
+            int actual = plan.GetTimeInProcess(proj.Workers[1]);
             int expected = 3;
 
             Assert.Equal(expected, actual);

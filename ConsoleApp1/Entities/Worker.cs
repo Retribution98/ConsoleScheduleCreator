@@ -12,7 +12,6 @@ namespace ConsoleScheduleCreator
         public string Name { get; }
         public int NumJob { get; }
         public Dictionary<uint,int> TimeOfWork { get; }
-        public int TimeInProcess { get; private set; }
         public int Priority { get; set; }                   // Приоритет для многопроходного алгоритма
 
         //Методы
@@ -22,7 +21,6 @@ namespace ConsoleScheduleCreator
             Name = _name;
             NumJob = id_jobs.Length;
             TimeOfWork = new Dictionary<uint, int>();
-            TimeInProcess = 0;
 
             for (int i=0; i<NumJob; i++)
             {
@@ -39,14 +37,6 @@ namespace ConsoleScheduleCreator
         public void Print(IPrinter printer)
         {
             printer.PrintLn(this.ToString());
-        }
-        public void AddProcess (uint id_job)
-        {
-            TimeInProcess += TimeOfWork[id_job];
-        }
-        public void Reset()
-        {
-            TimeInProcess = 0;
         }
     }
 

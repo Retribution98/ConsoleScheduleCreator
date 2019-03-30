@@ -13,11 +13,15 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy
         {
             var freestWorkers = plan.Workers
                 .Where(w => plan[w, time] == null)
-                .OrderBy(w => w.TimeInProcess);
+                .OrderBy(w => plan.GetTimeInProcess(w));
             var chanceArray = new List<Worker>();
+            if (freestWorkers.Max(w => w.Priority) == 0)
+            {
+                return freestWorkers.FirstOrDefault();
+            }
             foreach (var worker in freestWorkers)
             {
-                for (var i = 0; i<worker.Priority; i++)
+                for (var i = 0; i < worker.Priority; i++)
                 {
                     chanceArray.Add(worker);
                 }

@@ -196,10 +196,6 @@ namespace ConsoleScheduleCreator
             {
                 job.Reset();     //Сбрасывает параметры выполнения у работы
             }
-            foreach (var worker in Workers)
-            {
-                worker.Reset();
-            }
         }
 
         //public void AddJob(string name, int early, int late, int mulct, int numPrevios, int[] previos)         //Добавляем множество работ в проект

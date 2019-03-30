@@ -35,8 +35,8 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 
         public long GetPenalty(Project proj, Plan plan)
         {
-            var maxTimeInProcess = plan.Workers.Max(w => w.TimeInProcess);
-            var minTimeInProcess = plan.Workers.Min(w => w.TimeInProcess);
+            var maxTimeInProcess = plan.Workers.Max(w => plan.GetTimeInProcess(w));
+            var minTimeInProcess = plan.Workers.Min(w => plan.GetTimeInProcess(w));
             return (long)maxTimeInProcess - minTimeInProcess;
         }
 

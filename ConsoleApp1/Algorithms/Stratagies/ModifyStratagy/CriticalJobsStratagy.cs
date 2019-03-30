@@ -25,7 +25,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
             var criticalPrev = job.Previos.Where(j => j.TimeEnd == job.TimeStart - 1 && j.TimeStart != j.EarlyTime).ToList();
             if (criticalPrev.Any())
             {
-                var result = new List<Job>();
+                var result = new List<Job> { job };
                 criticalPrev.ForEach(j => result.AddRange(GetCriticalJobs(j)));
                 return result;
             }

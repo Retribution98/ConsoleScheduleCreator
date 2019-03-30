@@ -8,7 +8,7 @@ namespace ConsoleScheduleCreator.Entities
 {
     public class Plan
     {
-        private Job[,] _jobs;
+        private IDictionary<Worker, IDictionary<int,Job>> _jobs;
         public int Time { get; }
         public List<Worker> Workers { get; }
 
@@ -24,18 +24,31 @@ namespace ConsoleScheduleCreator.Entities
                     continue;
                 else Workers.Add(worker);
             }
-            _jobs = new Job[Workers.Count, Time];
+            _jobs = new Dictionary<Worker, IDictionary<int, Job>>();
+            foreach (var worker in Workers)
+            {
+                _jobs.Add(worker, new Dictionary<int, Job>());
+            }
         }
 
         public Job this[Worker worker, int time]
         {
             get
             {
-                return _jobs[Workers.IndexOf(worker), time];
+                return _jobs[worker].ContainsKey(time) 
+                    ? _jobs[worker][time] 
+                    : null;
             }
             set
             {
-                _jobs[Workers.IndexOf(worker), time] = value;
+                if (_jobs[worker].ContainsKey(time))
+                {
+                    _jobs[worker][time] = value;
+                }
+                else
+                {
+                    _jobs[worker].Add(time, value);
+                }
             }
         }
 
@@ -48,7 +61,6 @@ namespace ConsoleScheduleCreator.Entities
             var leadTime = worker.TimeOfWork[job.Id];
             //job.FinalPenalty = job.GetPenaltyForTime(time + leadTime - 1);
             job.Complete(time, time + leadTime - 1);
-            worker.AddProcess(job.Id);
             for (var delta = 0; delta < leadTime; delta++)
             {
                 this[worker, time + delta] = job;
@@ -57,12 +69,17 @@ namespace ConsoleScheduleCreator.Entities
 
         public bool HaveFreeWorker(int time)
         {
-            for (int worker = 0; worker < Workers.Count; worker++)
+            foreach(var worker in Workers)
             {
-                if (_jobs[worker, time] == null)
+                if (!_jobs[worker].ContainsKey(time))
                     return true;
             }
             return false;
+        }
+
+        public int GetTimeInProcess(Worker worker)
+        {
+            return _jobs[worker].Count();
         }
     }
 }
