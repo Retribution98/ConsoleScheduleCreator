@@ -58,7 +58,7 @@ namespace ConsoleScheduleCreator.Entities
             Console.Write($"Appoint job in {time}: {job.Id}");
             Console.ResetColor();
             Console.WriteLine();
-            var leadTime = worker.TimeOfWork[job.Id];
+            var leadTime = worker.TimeOfWork[job];
             //job.FinalPenalty = job.GetPenaltyForTime(time + leadTime - 1);
             job.Complete(time, time + leadTime - 1);
             for (var delta = 0; delta < leadTime; delta++)
@@ -81,5 +81,16 @@ namespace ConsoleScheduleCreator.Entities
         {
             return _jobs[worker].Count();
         }
+
+        public IEnumerable<int> GetTimesJobExecute(Job job)
+        {
+            var listTime = new List<int>();
+            foreach (var worker in Workers)
+            {
+                listTime.AddRange(_jobs[worker].Where(d => d.Value == job).Select(p => p.Key));
+            }
+            return listTime;
+        }
+
     }
 }

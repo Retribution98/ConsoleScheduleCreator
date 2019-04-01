@@ -13,7 +13,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
             var lastJob = proj.Jobs.First();
             foreach (var job in proj.Jobs)
             {
-                if (job.FinalPenalty > lastJob.FinalPenalty && job.TimeStart != job.EarlyTime)
+                if (job.TimeEnd > lastJob.TimeEnd && job.TimeStart != job.EarlyTime)
                     lastJob = job;
             }
             var result = GetCriticalJobs(lastJob);

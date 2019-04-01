@@ -25,11 +25,12 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
             var proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
             var plan = new Plan(proj.Workers, proj.Late);
             plan.AppointJob(job1, proj.Workers.Where(x => x.Name == "Petya").FirstOrDefault(), 1);
+            var drirectiveTimeStratagy = new JobsDirectiveTime();
 
             var expectedPenalty = 20L;
 
             Assert.True(job1.Completed);
-            Assert.Equal(expectedPenalty, job1.FinalPenalty);
+            Assert.Equal(expectedPenalty, drirectiveTimeStratagy.GetPenalty(proj, plan));
             //Assert.Equal(new Job[1, 5] {{ job1, job1, job1, null, null }}, plan);
         }
 
@@ -68,9 +69,21 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
             var plan = new Plan(proj.Workers, proj.Late);
 
             plan.AppointJob(job1, proj.Workers.FirstOrDefault(), 1);
+            var worker = plan.Workers.First();
 
-            var actual = (Job[,])typeof(Plan).GetField("_jobs", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(plan);
-            var expected = new Job[1, 5] { { null, job1, job1, job1, null } };
+            var actual = new Dictionary<int,Job>();
+            for (var t=0; t< 5; t++)
+            {
+                actual.Add(t, plan[worker, t]);
+            }
+            var expected = new Dictionary<int, Job>
+            {
+                { 0, null },
+                { 1, job1 },
+                { 2, job1 },
+                { 3, job1 },
+                { 4, null }
+            };
 
             Assert.Equal(expected, actual);
         }

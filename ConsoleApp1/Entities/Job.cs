@@ -14,7 +14,6 @@ namespace ConsoleScheduleCreator
         public int EarlyTime { get; }                                       //Раннее начало выполнения
         public int LateTime { get; }                                        //Позднее окончание выполнения
         public int Mulct { get; set; }                                           //Штраф
-        public Int64 FinalPenalty { get; private set; }                               //Итоговый штраф
         public  List<Job> Previos { get; set; }                    //Предшествующие работы
         public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
         public int TimeStart { get; set; }                                  //Время начала выполнения работы
@@ -61,22 +60,6 @@ namespace ConsoleScheduleCreator
             Completed = true;          // Устанваливаем статус "завершен"
             TimeStart = timeStart;
             TimeEnd = timeEnd;
-            // Рассчитываем полученный штраф за работу
-            if (timeEnd > LateTime) FinalPenalty = Mulct * (timeEnd - LateTime);
-            else FinalPenalty = 0;
-        }
-
-        public Int64 GetPenaltyForTime(int time)        //Возвращает общий штраф на момент времени time
-        {
-            if (Completed == true)             // Для заверешенных уже посчитано
-            {
-                return FinalPenalty;
-            }
-            else if (time > LateTime)           //Если просрочилось - добавляем штраф
-            {
-                return Mulct * (time - LateTime);
-            }
-            else return 0;
         }
 
         public override string ToString()
@@ -101,7 +84,6 @@ namespace ConsoleScheduleCreator
             TimeStart = -1;
             TimeEnd = -1;
             //Обнуляем полученные штрафы
-            FinalPenalty = 0;
             //Снимаем рабочие статусы
             Completed = false;
         }

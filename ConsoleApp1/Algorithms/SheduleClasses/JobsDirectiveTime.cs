@@ -28,12 +28,20 @@ namespace ConsoleScheduleCreator
             var penalty = 0L;
             foreach (var job in proj.Jobs)
             {
-                if (job.Completed == true)
-                {
-                    penalty += job.FinalPenalty;
-                }
-                else penalty += job.Mulct * plan.Time;
+                penalty += GetPenalty(job, plan);
             }
+            return penalty;
+        }
+
+        public long GetPenalty(Job job, Plan plan)
+        {
+            var times = plan.GetTimesJobExecute(job);
+            var timeEnd = times.Any()
+                ? times.Max()
+                : plan.Time;
+            var lateness = timeEnd - job.LateTime;
+                lateness = lateness > 0 ? lateness : 0;
+            var penalty = job.Mulct * lateness;
             return penalty;
         }
 

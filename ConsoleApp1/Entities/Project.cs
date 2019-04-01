@@ -42,24 +42,18 @@ namespace ConsoleScheduleCreator
             Workers = new List<Worker>();
             Jobs = jobs;
 
-            uint[] idJobs = new uint[jobs.Count];
-            for (int i =0; i<jobs.Count; i++)
-            {
-                idJobs[i] = jobs[i].Id;
-            }
-
             //создаем исполнителей проекта
             for (int i = 0; i < nameWorkers.Length; i++)
             {
-                int[] timeOfJob = new int[jobs.Count];
+                var timeOfJob = new Dictionary<Job, int>();
 
                 //Выделяем массив времен выбранного работника
                 for (int j = 0; j < jobs.Count; j++)
                 {
-                    timeOfJob[j] = workersTime[i, j];
+                    timeOfJob.Add(jobs[j], workersTime[i, j]);
                 }
                 //добавляем работника
-                Workers.Add(new Worker(nameWorkers[i], idJobs, timeOfJob));
+                Workers.Add(new Worker(nameWorkers[i], timeOfJob));
             }
         }
 
