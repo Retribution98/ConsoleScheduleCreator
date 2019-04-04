@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    public class Job:IPrintable
+    public class Job:IPrintable, ICloneable
     {
         //Свойства
         public uint Id { get; }                                              //ID работы
@@ -15,7 +15,7 @@ namespace ConsoleScheduleCreator
         public int LateTime { get; }                                        //Позднее окончание выполнения
         public int Mulct { get; set; }                                           //Штраф
         public  List<Job> Previos { get; set; }                    //Предшествующие работы
-        public  bool Completed { get; private set; }                         //Флаг окончания выполнения работы
+        public  bool IsCompleted { get; private set; }                         //Флаг окончания выполнения работы
         public int TimeStart { get; set; }                                  //Время начала выполнения работы
         public int TimeEnd { get; set; }                                    //Время окончания выполения работы
         public int Priority { get; set; }                       // Приоритет для многпороходного алгоритма
@@ -30,7 +30,7 @@ namespace ConsoleScheduleCreator
             EarlyTime = early;
             LateTime = late;
             Mulct = mulct;
-            Completed = false;
+            IsCompleted = false;
             TimeStart = -1;
             TimeEnd = -1;
             Previos = new List<Job>();
@@ -44,12 +44,12 @@ namespace ConsoleScheduleCreator
         
         public bool Ready(int time)         // Работа готова к выполнению
         {
-            if (Completed) return false; //Если работа завершена - не готова к выполнению
+            if (IsCompleted) return false; //Если работа завершена - не готова к выполнению
             if (EarlyTime > time) return false;     //если раннее время не наступило - не готова
             //Проверяем завершение выполнения предшественников
             foreach (Job prev in Previos)
             {
-                if (prev.Completed == false) return false;
+                if (prev.IsCompleted == false) return false;
                 if (prev.TimeEnd >= time) return false;
             }
             return true;
@@ -57,7 +57,7 @@ namespace ConsoleScheduleCreator
 
         public void Complete(int timeStart, int timeEnd)        //Работа выполнена
         {
-            Completed = true;          // Устанваливаем статус "завершен"
+            IsCompleted = true;          // Устанваливаем статус "завершен"
             TimeStart = timeStart;
             TimeEnd = timeEnd;
         }
@@ -85,7 +85,7 @@ namespace ConsoleScheduleCreator
             TimeEnd = -1;
             //Обнуляем полученные штрафы
             //Снимаем рабочие статусы
-            Completed = false;
+            IsCompleted = false;
         }
 
         /*public void AddPrevios(int amt, Job[] NewPrevios) // Добавление нескольких предшествующих работ

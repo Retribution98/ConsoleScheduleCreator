@@ -10,7 +10,7 @@ using ConsoleScheduleCreator.Algorithms;
 
 namespace ConsoleScheduleCreator
 {
-    public class Project:IPrintable
+    public class Project:IPrintable, ICloneable
     {    
         public string Name { get; private set; }
         public int Early { get; private set; }
@@ -19,6 +19,10 @@ namespace ConsoleScheduleCreator
         public  List<Worker> Workers { get; private set; }
         public Schedule Schedule { get; private set; }
 
+        public Project()
+        {
+
+        }
         //Конструктор
         public Project(string name, int early, int late, List<Job> jobs, string[] nameWorkers, int[,] workersTime)
         {
@@ -55,6 +59,15 @@ namespace ConsoleScheduleCreator
                 //добавляем работника
                 Workers.Add(new Worker(nameWorkers[i], timeOfJob));
             }
+        }
+
+        public Project(IEnumerable<Project> projects)
+        {
+            Name = $"Group project ({String.Join(", ", projects.Select(p => p.Name))})";
+            Early = projects.Min(p => p.Early);
+            Late = projects.Max(p => p.Late);
+            Jobs = projects.SelectMany(p => p.Jobs).Distinct().ToList();
+            Workers = projects.SelectMany(p => p.Workers).Distinct().ToList();
         }
 
         public static Project Open(string FileName)      //Открываем проект, сохраненный как файл Excel
@@ -190,6 +203,11 @@ namespace ConsoleScheduleCreator
             {
                 job.Reset();     //Сбрасывает параметры выполнения у работы
             }
+        }
+
+        public object Clone()
+        {
+            var newProject = new Project()
         }
 
         //public void AddJob(string name, int early, int late, int mulct, int numPrevios, int[] previos)         //Добавляем множество работ в проект

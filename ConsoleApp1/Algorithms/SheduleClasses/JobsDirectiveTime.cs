@@ -35,9 +35,8 @@ namespace ConsoleScheduleCreator
 
         public long GetPenalty(Job job, Plan plan)
         {
-            var times = plan.GetTimesJobExecute(job);
-            var timeEnd = times.Any()
-                ? times.Max()
+            var timeEnd = job.IsCompleted
+                ? job.TimeEnd
                 : plan.Time;
             var lateness = timeEnd - job.LateTime;
                 lateness = lateness > 0 ? lateness : 0;

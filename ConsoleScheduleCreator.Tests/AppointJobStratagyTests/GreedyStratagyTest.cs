@@ -29,7 +29,7 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
 
             var expectedPenalty = 20L;
 
-            Assert.True(job1.Completed);
+            Assert.True(job1.IsCompleted);
             Assert.Equal(expectedPenalty, drirectiveTimeStratagy.GetPenalty(proj, plan));
             //Assert.Equal(new Job[1, 5] {{ job1, job1, job1, null, null }}, plan);
         }

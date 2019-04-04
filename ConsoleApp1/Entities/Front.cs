@@ -11,7 +11,7 @@ namespace ConsoleScheduleCreator.Algorithms
     {
         public List<Job> Jobs { get; }
 
-        public Front(List<Job> jobs, int time)
+        public Front(IEnumerable<Job> jobs, int time)
         {
             if (jobs != null)
             {

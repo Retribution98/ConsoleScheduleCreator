@@ -20,11 +20,11 @@ namespace ConsoleScheduleCreator.Algorithms
             _printer = printer;
         }
 
-        private bool HaveDidntCompleteJob(Project proj)
+        private bool HaveDidntCompleteJob(IEnumerable<Job> jobs)
         {
-            foreach (Job job in proj.Jobs)
+            foreach (Job job in jobs)
             {
-                if (!job.Completed) return true;
+                if (!job.IsCompleted) return true;
             }
             return false;
         }
@@ -35,7 +35,7 @@ namespace ConsoleScheduleCreator.Algorithms
             var plan = new Plan(proj.Workers, proj.Late);
 
             //Строим расписание
-            for (int time = 0; HaveDidntCompleteJob(proj); time++)
+            for (int time = 0; HaveDidntCompleteJob(proj.Jobs); time++)
             {
                 //Создаем фронт работ в данный момент времени
                 Front front = new Front(proj.Jobs, time);

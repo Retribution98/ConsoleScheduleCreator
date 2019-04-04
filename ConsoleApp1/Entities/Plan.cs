@@ -9,21 +9,15 @@ namespace ConsoleScheduleCreator.Entities
     public class Plan
     {
         private IDictionary<Worker, IDictionary<int,Job>> _jobs;
-        public int Time { get; }
-        public List<Worker> Workers { get; }
+        public int Time { get; private set; }
+        public IEnumerable<Worker> Workers { get; }
 
-        public Plan(List<Worker> workers, int time)
+        public Plan(IEnumerable<Worker> workers, int time)
         {
             if (time > 0)
                 Time = time;
             else throw new ArgumentException("Wrong time");
-            Workers = new List<Worker>();
-            foreach (var worker in workers)
-            {
-                if (Workers.Contains(worker))
-                    continue;
-                else Workers.Add(worker);
-            }
+            Workers = workers.Distinct();
             _jobs = new Dictionary<Worker, IDictionary<int, Job>>();
             foreach (var worker in Workers)
             {
@@ -35,19 +29,21 @@ namespace ConsoleScheduleCreator.Entities
         {
             get
             {
-                return _jobs[worker].ContainsKey(time) 
-                    ? _jobs[worker][time] 
+                return _jobs[worker].ContainsKey(time)
+                    ? _jobs[worker][time]
                     : null;
             }
             set
             {
-                if (_jobs[worker].ContainsKey(time))
+                if (Workers.Contains(worker) && _jobs[worker].ContainsKey(time))
                 {
                     _jobs[worker][time] = value;
                 }
                 else
                 {
                     _jobs[worker].Add(time, value);
+                    if (time > Time)
+                        Time = time;
                 }
             }
         }

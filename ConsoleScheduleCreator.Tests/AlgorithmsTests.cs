@@ -23,7 +23,7 @@ namespace ConsoleScheduleCreator.Tests
             var proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
 
             var arg = new Object[1];
-            arg[0] = proj;
+            arg[0] = proj.Jobs;
 
             var actual = t.InvokeMember("HaveDidntCompleteJob",
                                     BindingFlags.InvokeMethod | BindingFlags.NonPublic |
@@ -48,7 +48,7 @@ namespace ConsoleScheduleCreator.Tests
             var proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
 
             var arg = new Object[1];
-            arg[0] = proj;
+            arg[0] = proj.Jobs;
 
             var actual = t.InvokeMember("HaveDidntCompleteJob",
                                     BindingFlags.InvokeMethod | BindingFlags.NonPublic |
