@@ -129,7 +129,7 @@ namespace ConsoleScheduleCreator
                 for (int Rnum = 2; Rnum < NumJobs + 2; Rnum++)
                 {
                     //считываем данные из файла
-                    uint job_id = (uint)(range.Cells[Rnum, 1] as Excel.Range).Value2;
+                    var job_id = (int)(range.Cells[Rnum, 1] as Excel.Range).Value2;
                     string job_name = (range.Cells[Rnum, 2] as Excel.Range).Value2.ToString();
                     int job_start = (int)(range.Cells[Rnum, 3] as Excel.Range).Value2;
                     int job_end = (int)(range.Cells[Rnum, 4] as Excel.Range).Value2;
@@ -144,7 +144,7 @@ namespace ConsoleScheduleCreator
                     for (int p = 0; p < NumPrevios; p++)
                     {
                         int idPrevios = (int)(range.Cells[Rnum, 7 + p] as Excel.Range).Value2;
-                        newJob.AddPrevios(jobs.Find( x => x.Id == idPrevios));
+                        newJob.AddPrevios(jobs.Find( x => x.Id == idPrevios.ToGuid()));
                     }
                     jobs.Add(newJob);
                 }
@@ -207,7 +207,21 @@ namespace ConsoleScheduleCreator
 
         public object Clone()
         {
-            var newProject = new Project()
+            var newJobs = this.Jobs
+                .ToDictionary(j => new Job(j.Name, Guid.NewGuid(), j.EarlyTime, j.LateTime, j.Mulct));
+            this.Jobs.ForEach(
+                j => 
+                j.Previos
+                    .ForEach(p => newJobs[j].AddPrevios(newJobs[p])));
+
+            return new Project
+            {
+                Name = this.Name,
+                Early = this.Early,
+                Late = this.Late,
+                Workers = this.Workers,
+                Jobs = newJobs.Values.ToList()
+            };
         }
 
         //public void AddJob(string name, int early, int late, int mulct, int numPrevios, int[] previos)         //Добавляем множество работ в проект

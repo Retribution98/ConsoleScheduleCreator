@@ -66,6 +66,7 @@
     <Compile Include="Entities\Schedule.cs" />
     <Compile Include="Entities\Worker.cs" />
     <Compile Include="Algorithms\SheduleClasses\JobsDirectiveTime.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

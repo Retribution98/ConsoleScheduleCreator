@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator
 {
-    public class Job:IPrintable, ICloneable
+    public class Job:IPrintable
     {
         //Свойства
-        public uint Id { get; }                                              //ID работы
+        public Guid Id { get; }                                              //ID работы
         public string Name { get; }                                         //Название работы
         public int EarlyTime { get; }                                       //Раннее начало выполнения
         public int LateTime { get; }                                        //Позднее окончание выполнения
@@ -22,7 +22,7 @@ namespace ConsoleScheduleCreator
         //Методы
 
         //Конструктор с заданным именем, временем раннего начала и познего окнчания выполнения, а так же штрафом
-        public Job(string name, uint id, int early, int late, int mulct)      
+        public Job(string name, Guid id, int early, int late, int mulct)      
         {
             //Инициализируем поля
             Id = id;
@@ -34,6 +34,11 @@ namespace ConsoleScheduleCreator
             TimeStart = -1;
             TimeEnd = -1;
             Previos = new List<Job>();
+        }
+
+        public Job(string name, int id, int early, int late, int mulct):
+            this(name, id.ToGuid(), early, late, mulct)
+        {
         }
 
         public void AddPrevios(Job NewPrevios)      // Добавление предшествующей работы
