@@ -10,22 +10,39 @@ namespace ConsoleScheduleCreator
     {
         //Свойства
         public string Name { get; }
-        public IDictionary<Job,int> TimeOfWork { get; }
+        private IDictionary<Job, int?> _timeOfWork;
         public int Priority { get; set; }                   // Приоритет для многопроходного алгоритма
 
         //Методы
-        public Worker(string _name, IDictionary<Job, int> time_of_work)      // Конструктор
+        public Worker(string _name, IDictionary<Job, int?> time_of_work)      // Конструктор
         {
             Name = _name;
-            TimeOfWork = time_of_work;
+            _timeOfWork = time_of_work;
         }
 
         public override string ToString()
         {
             StringBuilder msg = new StringBuilder($"Имя: {Name}\n");
-            foreach (KeyValuePair<Job,int> duo in TimeOfWork)
+            foreach (var duo in _timeOfWork)
                 msg.Append($"№{duo.Key}: {duo.Value}   ");
             return msg.ToString();
+        }
+
+        public int? GetTimeOfWork(Job job)
+        {
+            if (_timeOfWork.ContainsKey(job))
+            {
+                return _timeOfWork[job];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void AddJob(Job job, int? timeOfWork)
+        {
+            _timeOfWork.Add(job, timeOfWork);
         }
 
         public void Print(IPrinter printer)

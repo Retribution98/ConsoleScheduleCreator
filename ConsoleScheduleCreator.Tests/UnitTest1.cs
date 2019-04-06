@@ -1,5 +1,7 @@
 using ConsoleScheduleCreator.Algorithms;
 using ConsoleScheduleCreator.Algorithms.SheduleClasses;
+using ConsoleScheduleCreator.Entities;
+using ConsoleScheduleCreator.Entities.Project;
 using ConsoleScheduleCreator.GetWorkerStratagy;
 using System;
 using System.Collections;
@@ -373,7 +375,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 2,3,2,4,2,2,2,2,4}
             };
 
-            Project project = new Project("Test", 0, 10, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 10, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
             project.Reset();
@@ -389,6 +391,104 @@ namespace ConsoleScheduleCreator.Tests
             }
             
             Assert.True(numTrue > 15);
+        }
+
+        [Fact]
+        public void CreateScheduleTests_ProjectComposite_MultiAlgorithm_EqualWorker_EffectiveTest()
+        {
+            Job job1 = new Job("First", 1, 0, 10, 2);
+            Job job2 = new Job("Second", 2, 0, 2, 2);
+            Job job3 = new Job("Third", 3, 0, 4, 2);
+            job3.AddPrevios(job1);
+            Job job4 = new Job("Fourth", 4, 0, 6, 2);
+            job4.AddPrevios(job1);
+            Job job5 = new Job("Fifth", 5, 0, 8, 2);
+            job5.AddPrevios(job2);
+            Job job6 = new Job("Sixth", 6, 0, 2, 6);
+            job6.AddPrevios(job3);
+            Job job7 = new Job("Seventh", 7, 0, 4, 6);
+            job7.AddPrevios(job4);
+            Job job8 = new Job("Eighth", 8, 0, 6, 6);
+            job8.AddPrevios(job5);
+            job8.AddPrevios(job7);
+            Job job9 = new Job("Ninth", 9, 0, 8, 6);
+            job9.AddPrevios(job6);
+
+            List<Job> jobs = new List<Job>() { job1, job2, job3, job4, job5, job6, job7, job8, job9 };
+            string[] workersName = { "Vasya", "Petya", "Vova" };
+
+            int[,] workersTime =
+            {
+                { 2,3,3,2,4,3,2,4,3},
+                { 2,3,3,3,3,3,2,4,3},
+                { 2,3,2,4,2,2,2,2,4}
+            };
+
+            var projectProrotype = new Project("Test", 0, 10, jobs, workersName, workersTime);
+            var project = new ProjectComposite(
+                new List<IProject> {
+                    projectProrotype,
+                    projectProrotype.Clone() as IProject,
+                    projectProrotype.Clone() as IProject
+                });
+            project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+            var singleAlgorithmSchedule = project.Schedule;
+            project.Reset();
+            int numTrue = 0;
+            for (var i = 0; i < 100; i++)
+            {
+                project.MultiAlgorihm(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+                if (project.Schedule.Penalty < singleAlgorithmSchedule.Penalty)
+                {
+                    numTrue++;
+                }
+                project.Reset();
+            }
+
+            Assert.True(numTrue > 15);
+        }
+
+        [Fact]
+        public void CreateScheduleTests_ProjectRepeater_MultiAlgorithm_JobsDirectiveTime_EffectiveTest()
+        {
+            Job job1 = new Job("First", 1, 0, 10, 2);
+            Job job2 = new Job("Second", 2, 0, 2, 2);
+            job2.AddPrevios(job1);
+            Job job3 = new Job("Third", 3, 0, 4, 2);
+            job3.AddPrevios(job2);
+            Job job4 = new Job("Fourth", 4, 0, 6, 2);
+            job4.AddPrevios(job3);
+            Job job5 = new Job("Fifth", 5, 0, 8, 2);
+            job5.AddPrevios(job4);
+            Job job6 = new Job("Sixth", 6, 0, 2, 6);
+            job6.AddPrevios(job1);
+            Job job7 = new Job("Seventh", 7, 0, 4, 6);
+            job7.AddPrevios(job6);
+            Job job8 = new Job("Eighth", 8, 0, 6, 6);
+            job8.AddPrevios(job7);
+            Job job9 = new Job("Ninth", 9, 0, 8, 6);
+            job9.AddPrevios(job8);
+            Job job10 = new Job("Tenth", 10, 0, 10, 6);
+            job10.AddPrevios(job1);
+
+            List<Job> jobs = new List<Job>() { job1, job2, job3, job4, job5, job6, job7, job8, job9, job10 };
+            string[] workersName = { "Vasya", "Petya" };
+
+            int[,] workersTime =
+            {
+                { 1,2,2,2,2,2,2,2,2,1},
+                { 1,2,2,2,2,2,2,2,2,1}
+            };
+
+            var projectProtorype = new Project("Test", 0, 10, jobs, workersName, workersTime);
+            var project = new ProjectRepeater(projectProtorype, 100);
+            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            var singleAlgorithmSchedule = project.Schedule;
+            project.Reset();
+            project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            var multiAlgorithmSchedule = project.Schedule;
+
+            Assert.True(multiAlgorithmSchedule.Penalty < singleAlgorithmSchedule.Penalty);
         }
     }
 }

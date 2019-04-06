@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleScheduleCreator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ConsoleScheduleCreator.Algorithms
 {
     public interface IAlgorithm
     {
-        Schedule CreateShedule(Project proj);
-        Schedule MultiAlgorihm(Project proj);
+        Schedule CreateShedule(IProject proj);
+        Schedule MultiAlgorihm(IProject proj);
     }
 }

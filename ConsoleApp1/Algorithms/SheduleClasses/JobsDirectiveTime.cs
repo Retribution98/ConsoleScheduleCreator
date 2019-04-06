@@ -23,7 +23,7 @@ namespace ConsoleScheduleCreator
             _modifyStratagy = criticalJobStratagy ?? new PenaltyStratagy();
         }
 
-        public long GetPenalty(Project proj,  Plan plan)
+        public long GetPenalty(IProject proj,  Plan plan)
         {
             var penalty = 0L;
             foreach (var job in proj.Jobs)
@@ -54,7 +54,7 @@ namespace ConsoleScheduleCreator
             return _getWorkerStratagy.GetWorker(job, plan, time);
         }
 
-        public void ModifyProject(Project project)
+        public void ModifyProject(IProject project)
         {
             _modifyStratagy.ModifyProject(project);
         }

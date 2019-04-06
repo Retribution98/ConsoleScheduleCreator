@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleScheduleCreator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
     class PenaltyStratagy: IModifyStratagy
     {
-        private IEnumerable<Job> GetCriticalJobs(Project proj)
+        private IEnumerable<Job> GetCriticalJobs(IProject proj)
         {
             var lastJob = proj.Jobs.First();
             foreach (var job in proj.Jobs)
@@ -35,7 +36,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
             }
         }
 
-        public void ModifyProject(Project project)
+        public void ModifyProject(IProject project)
         {
             var criticalJobs = GetCriticalJobs(project);
             Console.BackgroundColor = ConsoleColor.Yellow;

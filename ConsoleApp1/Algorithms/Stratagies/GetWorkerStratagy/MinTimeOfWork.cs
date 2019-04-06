@@ -13,7 +13,7 @@ namespace ConsoleScheduleCreator.GetWorkerStratagy
         {
             var selectWorker = plan.Workers
                 .Where(w => plan[w, time] == null)
-                .OrderBy(w => w.TimeOfWork[job])
+                .OrderBy(w => w.GetTimeOfWork(job))
                 .FirstOrDefault();
 
             return selectWorker;

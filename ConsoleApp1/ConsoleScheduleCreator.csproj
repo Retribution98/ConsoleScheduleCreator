@@ -58,10 +58,13 @@
     <Compile Include="Algorithms\Stratagies\NextJobStratagys\FirstlyStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\NextJobStratagys\INextJobStratagy.cs" />
     <Compile Include="Algorithms\Stratagies\NextJobStratagys\MaxMulctStratagy.cs" />
+    <Compile Include="Entities\Project\IProject.cs" />
+    <Compile Include="Entities\Project\ProjectComposite.cs" />
+    <Compile Include="Entities\Project\ProjectRepeater.cs" />
     <Compile Include="Print.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\Project\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Schedule.cs" />
     <Compile Include="Entities\Worker.cs" />

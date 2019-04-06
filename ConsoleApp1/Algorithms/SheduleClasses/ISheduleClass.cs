@@ -11,6 +11,6 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 {
     public interface ISheduleClass : IGetWorkerStratagy, INextJobStratagy, IModifyStratagy
     {
-        long GetPenalty(Project proj, Plan plan);
+        long GetPenalty(IProject proj, Plan plan);
     }
 }

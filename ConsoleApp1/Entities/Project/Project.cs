@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Reflection; //чтение данных из файлов Excel
 using Excel = Microsoft.Office.Interop.Excel;
 using ConsoleScheduleCreator.Algorithms;
+using ConsoleScheduleCreator.Entities;
 
 namespace ConsoleScheduleCreator
 {
-    public class Project:IPrintable, ICloneable
+    public class Project: IProject, IPrintable, ICloneable
     {    
         public string Name { get; private set; }
         public int Early { get; private set; }
@@ -19,10 +20,7 @@ namespace ConsoleScheduleCreator
         public  List<Worker> Workers { get; private set; }
         public Schedule Schedule { get; private set; }
 
-        public Project()
-        {
-
-        }
+        private Project() { }
         //Конструктор
         public Project(string name, int early, int late, List<Job> jobs, string[] nameWorkers, int[,] workersTime)
         {
@@ -49,7 +47,7 @@ namespace ConsoleScheduleCreator
             //создаем исполнителей проекта
             for (int i = 0; i < nameWorkers.Length; i++)
             {
-                var timeOfJob = new Dictionary<Job, int>();
+                var timeOfJob = new Dictionary<Job, int?>();
 
                 //Выделяем массив времен выбранного работника
                 for (int j = 0; j < jobs.Count; j++)
@@ -60,16 +58,7 @@ namespace ConsoleScheduleCreator
                 Workers.Add(new Worker(nameWorkers[i], timeOfJob));
             }
         }
-
-        public Project(IEnumerable<Project> projects)
-        {
-            Name = $"Group project ({String.Join(", ", projects.Select(p => p.Name))})";
-            Early = projects.Min(p => p.Early);
-            Late = projects.Max(p => p.Late);
-            Jobs = projects.SelectMany(p => p.Jobs).Distinct().ToList();
-            Workers = projects.SelectMany(p => p.Workers).Distinct().ToList();
-        }
-
+        
         public static Project Open(string FileName)      //Открываем проект, сохраненный как файл Excel
         {
             string proj_name;       //Имя проекта
@@ -208,19 +197,20 @@ namespace ConsoleScheduleCreator
         public object Clone()
         {
             var newJobs = this.Jobs
-                .ToDictionary(j => new Job(j.Name, Guid.NewGuid(), j.EarlyTime, j.LateTime, j.Mulct));
-            this.Jobs.ForEach(
-                j => 
-                j.Previos
-                    .ForEach(p => newJobs[j].AddPrevios(newJobs[p])));
-
+                .ToDictionary(j => j, j => new Job(j.Name, Guid.NewGuid(), j.EarlyTime, j.LateTime, j.Mulct));
+            foreach(var job in Jobs)
+            {
+                job.Previos
+                    .ForEach(p => newJobs[job].AddPrevios(newJobs[p]));
+                Workers.ForEach(w => w.AddJob(newJobs[job], w.GetTimeOfWork(job)));
+            }
             return new Project
             {
                 Name = this.Name,
                 Early = this.Early,
                 Late = this.Late,
-                Workers = this.Workers,
-                Jobs = newJobs.Values.ToList()
+                Jobs = newJobs.Values.ToList(),
+                Workers = this.Workers
             };
         }
 

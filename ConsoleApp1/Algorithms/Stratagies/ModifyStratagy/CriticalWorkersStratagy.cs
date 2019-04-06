@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleScheduleCreator.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
     class CriticalWorkersStratagy : IModifyStratagy
     {
-        public void ModifyProject(Project project)
+        public void ModifyProject(IProject project)
         {
             var maxValue = project.Workers.Max(w => project.Schedule.Planner.GetTimeInProcess(w));
             project.Workers.ForEach(w => w.Priority = maxValue - project.Schedule.Planner.GetTimeInProcess(w) + 1);

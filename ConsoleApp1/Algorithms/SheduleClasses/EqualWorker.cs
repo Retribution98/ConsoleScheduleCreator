@@ -33,14 +33,14 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
             return _getWorkerStratagy.GetWorker(job, plan, time);
         }
 
-        public long GetPenalty(Project proj, Plan plan)
+        public long GetPenalty(IProject proj, Plan plan)
         {
             var maxTimeInProcess = plan.Workers.Max(w => plan.GetTimeInProcess(w));
             var minTimeInProcess = plan.Workers.Min(w => plan.GetTimeInProcess(w));
             return (long)maxTimeInProcess - minTimeInProcess;
         }
 
-        public void ModifyProject(Project project)
+        public void ModifyProject(IProject project)
         {
             _modifyStratagy.ModifyProject(project);
         }

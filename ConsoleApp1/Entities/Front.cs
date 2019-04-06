@@ -9,7 +9,7 @@ namespace ConsoleScheduleCreator.Algorithms
 {
     public class Front
     {
-        public List<Job> Jobs { get; }
+        public List<Job> Jobs { get;  }
 
         public Front(IEnumerable<Job> jobs, int time)
         {
@@ -28,6 +28,10 @@ namespace ConsoleScheduleCreator.Algorithms
         public Job GetNextJob(INextJobStratagy stratagyNextJob)
         {
             return stratagyNextJob.GetJob(Jobs);
+        }
+        public void RemoveJob(Job job)
+        {
+            Jobs.Remove(job);
         }
     }
 }

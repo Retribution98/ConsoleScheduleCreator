@@ -54,7 +54,12 @@ namespace ConsoleScheduleCreator.Entities
             Console.Write($"Appoint job in {time}: {job.Id}");
             Console.ResetColor();
             Console.WriteLine();
-            var leadTime = worker.TimeOfWork[job];
+            var timeOfWork = worker.GetTimeOfWork(job);
+            if (timeOfWork == null)
+            {
+                return;
+            }
+            var leadTime = timeOfWork.Value;
             //job.FinalPenalty = job.GetPenaltyForTime(time + leadTime - 1);
             job.Complete(time, time + leadTime - 1);
             for (var delta = 0; delta < leadTime; delta++)

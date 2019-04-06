@@ -29,7 +29,7 @@ namespace ConsoleScheduleCreator.Algorithms
             return false;
         }
 
-        public Schedule CreateShedule(Project proj)
+        public Schedule CreateShedule(IProject proj)
         {
             //Определяем расписание как график Ганта
             var plan = new Plan(proj.Workers, proj.Late);
@@ -49,14 +49,14 @@ namespace ConsoleScheduleCreator.Algorithms
                     var job = front.GetNextJob(_sheduleClass);
                     var worker = _sheduleClass.GetWorker(job, plan, time);
                     plan.AppointJob(job, worker, time);
-                    front = new Front(proj.Jobs, time);
+                    front.RemoveJob(job);
                 }
             }
             var penalty = _sheduleClass.GetPenalty(proj, plan);
             return new Schedule(plan, penalty);
         }
 
-        public Schedule MultiAlgorihm(Project proj)
+        public Schedule MultiAlgorihm(IProject proj)
         {
             var schedule = CreateShedule(proj);
             var newSchedule = schedule;
