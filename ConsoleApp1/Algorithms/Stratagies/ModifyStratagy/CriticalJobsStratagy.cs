@@ -9,12 +9,14 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
     class PenaltyStratagy: IModifyStratagy
     {
+        private IDictionary<Job, (int? start, int? end)> _jobsTimeEnd;
+
         private IEnumerable<Job> GetCriticalJobs(IProject proj)
         {
             var lastJob = proj.Jobs.First();
             foreach (var job in proj.Jobs)
             {
-                if (job.TimeEnd > lastJob.TimeEnd && job.TimeStart != job.EarlyTime)
+                if (_jobsTimeEnd[job].end > _jobsTimeEnd[lastJob].end && _jobsTimeEnd[job].start != job.EarlyTime)
                     lastJob = job;
             }
             var result = GetCriticalJobs(lastJob);
@@ -23,7 +25,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 
         private IEnumerable<Job> GetCriticalJobs(Job job)
         {
-            var criticalPrev = job.Previos.Where(j => j.TimeEnd == job.TimeStart - 1 && j.TimeStart != j.EarlyTime).ToList();
+            var criticalPrev = job.Previos.Where(j => _jobsTimeEnd[j].end == _jobsTimeEnd[job].start - 1 && _jobsTimeEnd[j].start != j.EarlyTime).ToList();
             if (criticalPrev.Any())
             {
                 var result = new List<Job> { job };
@@ -36,8 +38,21 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
             }
         }
 
-        public void ModifyProject(IProject project)
+        public void ModifyProject(IProject project, Plan plan)
         {
+            _jobsTimeEnd = new Dictionary<Job, (int?, int?)>();
+            foreach(var job in project.Jobs)
+            {
+                var times = plan.GetTimesJobExecute(job);
+                if (times.Any())
+                {
+                    _jobsTimeEnd.Add(job, (times.Min(), times.Max()));
+                }
+                else
+                {
+                    _jobsTimeEnd.Add(job, (null, null));
+                }
+            }
             var criticalJobs = GetCriticalJobs(project);
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;

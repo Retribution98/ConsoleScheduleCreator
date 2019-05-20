@@ -8,8 +8,9 @@ using System.Reflection; //чтение данных из файлов Excel
 using Excel = Microsoft.Office.Interop.Excel;
 using ConsoleScheduleCreator.Algorithms;
 using ConsoleScheduleCreator.Entities;
+using Shields.GraphViz.Models;
 
-namespace ConsoleScheduleCreator
+namespace ConsoleScheduleCreator.Entities.Project
 {
     public class Project: IProject, IPrintable, ICloneable
     {    
@@ -18,7 +19,7 @@ namespace ConsoleScheduleCreator
         public int Late { get; private set; }
         public  List<Job> Jobs { get; private set; }
         public  List<Worker> Workers { get; private set; }
-        public Schedule Schedule { get; private set; }
+        public Schedule Schedule { get; set; }
 
         private Project() { }
         //Конструктор
@@ -58,7 +59,166 @@ namespace ConsoleScheduleCreator
                 Workers.Add(new Worker(nameWorkers[i], timeOfJob));
             }
         }
-        
+        public Project(string name, int early, int late, IEnumerable<Job> jobs, IEnumerable<Worker> workers)
+        {
+            Name = name;
+            Early = early;
+            Late = late;
+            Jobs = jobs.ToList();
+            Workers = workers.ToList();
+        }
+
+        public class ProjectBuilder
+        {
+            private class Element
+            {
+                public Job Job { get; }
+                public int Level { get; }
+
+                public static IList<Element> GetSomeInstance(int count)
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            private class Combination
+            {
+                private IEnumerable<Element> _elements;
+                private int countForCombine;
+                private readonly Func<int> getNextCount;
+                private readonly Action<Element> addElement;
+
+                public Combination(int minCombination, int maxCombination, Action<Element> addCombineElement)
+                {
+                    var random = new Random();
+                    this.getNextCount = () => random.Next(minCombination, maxCombination);
+                    this._elements = new List<Element>();
+                    this.addElement = addCombineElement;
+                }
+
+                public void Add(Element element)
+                {
+                    Add(new Element[] { element });
+                }
+
+                public void Add(IEnumerable<Element> elements)
+                {
+                    foreach(var element in elements)
+                    {
+                        _elements.Append(element);
+                    }
+                    if (_elements.Count() >= countForCombine)
+                    {
+                        Combine();
+                        countForCombine = getNextCount();
+                    }
+                }
+
+                public void Combine()
+                {
+                    var newElement = Element.GetSomeInstance(1).First();
+                    // ДОбавление связей
+                    foreach (var element in _elements)
+                    {
+                        newElement.Job.AddPrevios(element.Job);
+                    }
+                    // Добавление в множество
+                    addElement(newElement);
+                }
+            }
+
+            private const int maxLevel = 3;
+            private const int minBranch = 0;
+            private const int maxBranch = 0;
+            private const int minDivarivation = 0;
+            private const int maxDivarivation = 0;
+            private const int minCombination = 0;
+            private const int maxCombination = 0;
+
+            private const int branchСhance = 50;
+            private const int divaricationChance = 25;
+
+            private List<Element> lastElements;
+            private List<Element> allElements;
+            private Combination combination;
+            
+            public ProjectBuilder()
+            {
+                lastElements = new List<Element>();
+                allElements = new List<Element>();
+                combination = new Combination(minCombination, maxCombination,
+                    (Element combineElement) =>
+                    {
+                        allElements.Add(combineElement);
+                        lastElements.Add(combineElement);
+                    });
+            }
+
+            public void A(int countElement)
+            {
+                // TODO: добавить ограничение на повторение однотипных элементов
+                var random = new Random();
+                while (lastElements.Any() && allElements.Count < countElement - 1)
+                { 
+                    var element = lastElements.First();
+                    var num = random.Next(100);
+                    if (num < branchСhance)
+                    {
+                        AddBranch(element,
+                            Math.Min(random.Next(minBranch, maxBranch), countElement - allElements.Count - 1));
+                    }
+                    else if (element.Level < maxLevel && num < branchСhance + divaricationChance)
+                    {
+                        AddDivarication(element,
+                            Math.Min(random.Next(minDivarivation, maxDivarivation), countElement - allElements.Count - 1));
+                    }
+                    else
+                    {
+                        combination.Add(element);
+                    }
+                    lastElements.Remove(element);
+
+                }
+                combination.Add(lastElements);
+                lastElements.Clear();
+            }
+
+            private void AddBranch(Element element, int length)
+            {
+                if (!allElements.Contains(element))
+                {
+                    allElements.Add(element);
+                }
+                var elements = Element.GetSomeInstance(length);
+                //Устаналвиваем связи
+                elements[0].Job.AddPrevios(element.Job);
+                for(var i=1; i<length; i++)
+                {
+                    elements[i].Job.AddPrevios(elements[i - 1].Job);
+                }
+                // Добавляем в множества
+                allElements.AddRange(elements);
+                lastElements.Add(elements.Last());
+            }
+
+            private void AddDivarication(Element element, int width)
+            {
+                if (!allElements.Contains(element))
+                {
+                    allElements.Add(element);
+                }
+                var elements = Element.GetSomeInstance(width);
+                //Устанавлвиаются связи
+                foreach (var el in elements)
+                {
+                    el.Job.AddPrevios(element.Job);
+                }
+                // Добавляются в множества
+                allElements.AddRange(elements);
+                lastElements.AddRange(elements);
+            }
+                                   
+        }   
+
         public static Project Open(string FileName)      //Открываем проект, сохраненный как файл Excel
         {
             string proj_name;       //Имя проекта
@@ -214,21 +374,75 @@ namespace ConsoleScheduleCreator
             };
         }
 
-        //public void AddJob(string name, int early, int late, int mulct, int numPrevios, int[] previos)         //Добавляем множество работ в проект
-        //{
-        //    // Устанваливаем временные ограничения для работы, если отсутсвует ограничения или они выходят за рамки ограничений проекта - заменяются значениями проекта
-        //    if ((early == -1) || (early < Early)) early = this.Early;
-        //    if ((late == -1) || (late > Late)) late = this.Late;
+        public void AddJob(Job newJob, Dictionary<Worker, int> timeOfWork)
+        {
+            Jobs.Add(newJob);
+            foreach (var worker in Workers)
+            {
+                worker.AddJob(newJob, timeOfWork[worker]);
+            }
+        }
 
-        //    IdJobs++; // увеличиваем счетчик id работ проекта
-        //    // Создаем новую работу в массиве работ проекта
-        //    Jobs.Add(new Job(name, IdJobs, early, late, mulct));
+        public void PrintTimeLine(IPrinter printer)
+        {
+            if (Schedule.Planner == null)
+            {
+                printer.PrintLn("Shedule is null");
+                return;
+            }
+            var projectInfo = Schedule.Planner.GetProjectTimeInfo(this);
+            if(projectInfo.start == null || projectInfo.end == null)
+            {
+                printer.PrintLn("Project is not planned");
+                return;
+            }
+            var start = projectInfo.start.Value;
+            var end = projectInfo.end.Value;
+            var helpStr = new String(' ', Late + 1) + "|";
+            var timeLineStr = new StringBuilder();
+            //time wait
+            if (Late > start)
+            {
+                timeLineStr.Append(new string(' ', start));
+            }
+            else
+            {
+                timeLineStr.Append(new string(' ', Late + 1));
+                timeLineStr.Append('|');
+                timeLineStr.Append(new string(' ', start - Late - 1));
+            }
+            //time execute
+            if (Late > start && Late <= end)
+            {
+                timeLineStr.Append(new string('-', Late - start + 1));
+                timeLineStr.Append('|');
+                timeLineStr.Append(new string('-', end - Late));
+            }
+            else
+            {
+                timeLineStr.Append(new string('-', end - start + 1));
+            }
+            //time after
+            if (Late > end)
+            {
+                timeLineStr.Append(new string(' ', Late - end));
+                timeLineStr.Append('|');
+            }
 
-        //    //Добавляем для новой работы множество предшестующих
-        //    for (int i = 0; i < numPrevios; i++)
-        //    {
-        //        Jobs.Last().AddPrevios(Jobs[previos[i] - 1]);
-        //    }
-        //}
+            printer.PrintLn(helpStr);
+            printer.PrintLn(timeLineStr.ToString());
+            printer.PrintLn(helpStr);
+        }
+
+        public void PrintGraph(IPrinter printer)
+        {
+            Graph graph = Graph.Directed;
+            foreach(var job in Jobs)
+            {
+                var stats = job.Previos.Select(pr => EdgeStatement.For(pr.Name, job.Name));
+                graph.AddRange(stats);
+            };
+            printer.PrintGraph(graph, Name);
+        }
     }
 }

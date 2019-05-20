@@ -40,9 +40,9 @@ namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
             return (long)maxTimeInProcess - minTimeInProcess;
         }
 
-        public void ModifyProject(IProject project)
+        public void ModifyProject(IProject project, Plan plan)
         {
-            _modifyStratagy.ModifyProject(project);
+            _modifyStratagy.ModifyProject(project, plan);
         }
     }
 }

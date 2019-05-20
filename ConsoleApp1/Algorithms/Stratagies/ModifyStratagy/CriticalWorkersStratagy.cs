@@ -9,10 +9,10 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
     class CriticalWorkersStratagy : IModifyStratagy
     {
-        public void ModifyProject(IProject project)
+        public void ModifyProject(IProject project, Plan plan)
         {
-            var maxValue = project.Workers.Max(w => project.Schedule.Planner.GetTimeInProcess(w));
-            project.Workers.ForEach(w => w.Priority = maxValue - project.Schedule.Planner.GetTimeInProcess(w) + 1);
+            var maxValue = project.Workers.Max(w => plan.GetTimeInProcess(w));
+            project.Workers.ForEach(w => w.Priority = maxValue - plan.GetTimeInProcess(w) + 1);
         }
     }
 }

@@ -12,8 +12,8 @@ namespace ConsoleScheduleCreator.NextJobStratagies
         {
             if (jobs == null) return null;
             return jobs
-                .OrderByDescending(j => j.Priority).
-                ThenByDescending(j => j.Mulct)
+                .OrderByDescending(j => j.Priority)
+                .ThenByDescending(j => j.Mulct)
                 .FirstOrDefault();
         }
     }

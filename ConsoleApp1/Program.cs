@@ -1,4 +1,5 @@
 ﻿using ConsoleScheduleCreator.Algorithms;
+using ConsoleScheduleCreator.Entities.Project;
 using System;
 
 namespace ConsoleScheduleCreator
@@ -7,7 +8,7 @@ namespace ConsoleScheduleCreator
     {
         static void Main(string[] args)
         {
-            Project proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
+            var proj = Project.Open(@"D:\GIT\ConsoleScheduleCreator\Data.xlsx");
             if (proj == null)
             {
                 System.GC.Collect();

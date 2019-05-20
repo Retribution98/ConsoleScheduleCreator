@@ -15,6 +15,8 @@ namespace ConsoleScheduleCreator.Entities.Project
 
         private readonly uint _numRepeat;
 
+        private Schedule _schedule;
+
         public string Name { get { return $"Repeat project ({Project.Name})"; } }
 
         public int Early { get { return Project.Early; } }
@@ -25,7 +27,13 @@ namespace ConsoleScheduleCreator.Entities.Project
 
         public List<Worker> Workers { get { return Project.Workers; } }
 
-        public Schedule Schedule { get; private set; }
+        public Schedule Schedule {
+            get { return _schedule; }
+            set {
+                _schedule = value;
+                _repeatedProjects.ForEach(pr => pr.Schedule = value);
+            }
+        }
 
         public ProjectRepeater (IProject project, uint numRepeat)
         {
@@ -34,7 +42,27 @@ namespace ConsoleScheduleCreator.Entities.Project
             _repeatedProjects = new List<IProject>();
             for (var i =0; i<_numRepeat; i++)
             {
-                _repeatedProjects.Add(project.Clone() as IProject);
+                var newPorject = project.Clone() as IProject;
+                var lastProject = _repeatedProjects.LastOrDefault();
+                if (lastProject != null)
+                {
+                    var separatingJob = new Job("Separator", Guid.NewGuid(), lastProject.Early, lastProject.Late, 0);
+                    foreach (var job in lastProject.Jobs)
+                    {
+                        separatingJob.AddPrevios(job);
+                    }
+                    foreach(var job in newPorject.Jobs)
+                    {
+                        job.AddPrevios(separatingJob);
+                    }
+                    var timeOfWork = new Dictionary<Worker, int>();
+                    foreach (var worker in lastProject.Workers)
+                    {
+                        timeOfWork.Add(worker, 0);
+                    }
+                    lastProject.AddJob(separatingJob, timeOfWork);
+                }
+                _repeatedProjects.Add(newPorject);
             }
         }
 
@@ -56,6 +84,16 @@ namespace ConsoleScheduleCreator.Entities.Project
         public object Clone()
         {
             return new ProjectRepeater(Project.Clone() as IProject, _numRepeat);
+        }
+
+        public void AddJob(Job newJob, Dictionary<Worker, int> timeOfWorker)
+        {
+            _repeatedProjects.Last().AddJob(newJob, timeOfWorker);
+        }
+
+        public void PrintTimeLine(IPrinter printer)
+        {
+            _repeatedProjects.ForEach(p => p.PrintTimeLine(printer));
         }
     }
 }

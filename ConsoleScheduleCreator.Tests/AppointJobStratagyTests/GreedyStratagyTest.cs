@@ -6,6 +6,7 @@ using Xunit;
 using Moq;
 using ConsoleScheduleCreator.Entities;
 using System.Reflection;
+using ConsoleScheduleCreator.Entities.Project;
 
 namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
 {

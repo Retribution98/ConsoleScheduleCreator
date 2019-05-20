@@ -54,9 +54,9 @@ namespace ConsoleScheduleCreator
             return _getWorkerStratagy.GetWorker(job, plan, time);
         }
 
-        public void ModifyProject(IProject project)
+        public void ModifyProject(IProject project, Plan plan)
         {
-            _modifyStratagy.ModifyProject(project);
+            _modifyStratagy.ModifyProject(project, plan);
         }
     }
 }

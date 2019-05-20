@@ -49,10 +49,12 @@ namespace ConsoleScheduleCreator.Algorithms
                     var job = front.GetNextJob(_sheduleClass);
                     var worker = _sheduleClass.GetWorker(job, plan, time);
                     plan.AppointJob(job, worker, time);
-                    front.RemoveJob(job);
+                    //нельзя просто удалить установившуюся работу, так как могут появиться новые работы во фронте
+                    front = new Front(proj.Jobs, time);
                 }
             }
             var penalty = _sheduleClass.GetPenalty(proj, plan);
+            proj.Reset();
             return new Schedule(plan, penalty);
         }
 
@@ -64,7 +66,7 @@ namespace ConsoleScheduleCreator.Algorithms
             {
                 schedule = newSchedule;
                 
-                _sheduleClass.ModifyProject(proj);
+                _sheduleClass.ModifyProject(proj, schedule.Planner);
                 proj.Reset();
                 newSchedule = CreateShedule(proj);
                 _printer.PrintLn("//////////");
@@ -72,6 +74,7 @@ namespace ConsoleScheduleCreator.Algorithms
                 _printer.PrintLn("\\\\\\\\\\");
             }
             while (schedule.Penalty > newSchedule.Penalty);
+            proj.Reset();
             return schedule;
         }
     }

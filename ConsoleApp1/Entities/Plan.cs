@@ -92,6 +92,13 @@ namespace ConsoleScheduleCreator.Entities
             }
             return listTime;
         }
+        
+        public (int? start, int? end) GetProjectTimeInfo(IProject project)
+        {
+            var start = project.Jobs.Select(j => GetTimesJobExecute(j).Min()).Min();
+            var end = project.Jobs.Select(j => GetTimesJobExecute(j).Max()).Max();
 
+            return (start, end);
+        }
     }
 }

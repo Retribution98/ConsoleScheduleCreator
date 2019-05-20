@@ -5,6 +5,6 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
     public interface IModifyStratagy
     {
-        void ModifyProject(IProject project);
+        void ModifyProject(IProject project, Plan plan);
     }
 }

@@ -17,7 +17,7 @@ namespace ConsoleScheduleCreator
         public Worker(string _name, IDictionary<Job, int?> time_of_work)      // Конструктор
         {
             Name = _name;
-            _timeOfWork = time_of_work;
+            _timeOfWork = new Dictionary<Job, int?>(time_of_work);
         }
 
         public override string ToString()

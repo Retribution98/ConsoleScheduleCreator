@@ -43,7 +43,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 3,3,3,3,3,3,3,3}
             };
 
-            Project project = new Project("Test", 0, 20, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 20, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
@@ -89,7 +89,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 1,4,2,1,3,2,2,2}
             };
 
-            Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
 
             var actual = project.Schedule.Planner;
@@ -136,7 +136,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 1,4,2,1,3,2,2,2}
             };
 
-            Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
 
             var actual = project.Schedule.Planner;
@@ -186,7 +186,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 1,1,1,1,1,1,1,1}
             };
 
-            Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
             var specialShedule = project.Schedule;
             project.Reset();
@@ -238,7 +238,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 1,1,1,1,1,1,1,1}
             };
 
-            Project project = new Project("Test", 0, 15, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
             project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
             var specialShedule = project.Schedule;
             project.Reset();
@@ -285,7 +285,7 @@ namespace ConsoleScheduleCreator.Tests
                 { 1,2,2,2,2,2,2,2,2,1}
             };
 
-            Project project = new Project("Test", 0, 10, jobs, workersName, workersTime);
+            var project = new Project("Test", 0, 10, jobs, workersName, workersTime);
             project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
@@ -451,43 +451,62 @@ namespace ConsoleScheduleCreator.Tests
         [Fact]
         public void CreateScheduleTests_ProjectRepeater_MultiAlgorithm_JobsDirectiveTime_EffectiveTest()
         {
-            Job job1 = new Job("First", 1, 0, 10, 2);
-            Job job2 = new Job("Second", 2, 0, 2, 2);
+            var job1 = new Job("1", 1, 0, 4, 5);
+            var job2 = new Job("2", 2, 0, 4, 5);
             job2.AddPrevios(job1);
-            Job job3 = new Job("Third", 3, 0, 4, 2);
-            job3.AddPrevios(job2);
-            Job job4 = new Job("Fourth", 4, 0, 6, 2);
+            var job3 = new Job("3", 3, 0, 4, 5);
+            job3.AddPrevios(job1);
+            var job4 = new Job("4", 4, 0, 4, 5);
             job4.AddPrevios(job3);
-            Job job5 = new Job("Fifth", 5, 0, 8, 2);
+            var job5 = new Job("5", 5, 0, 4, 5);
+            job5.AddPrevios(job2);
             job5.AddPrevios(job4);
-            Job job6 = new Job("Sixth", 6, 0, 2, 6);
-            job6.AddPrevios(job1);
-            Job job7 = new Job("Seventh", 7, 0, 4, 6);
+            var job6 = new Job("6", 6, 0, 3, 5);
+            var job7 = new Job("7", 7, 0, 3, 5);
             job7.AddPrevios(job6);
-            Job job8 = new Job("Eighth", 8, 0, 6, 6);
-            job8.AddPrevios(job7);
-            Job job9 = new Job("Ninth", 9, 0, 8, 6);
-            job9.AddPrevios(job8);
-            Job job10 = new Job("Tenth", 10, 0, 10, 6);
-            job10.AddPrevios(job1);
+            var job8 = new Job("8", 8, 0, 3, 5);
+            job8.AddPrevios(job6);
+            var job9 = new Job("9", 9, 0, 3, 5);
+            job9.AddPrevios(job6);
+            var job10 = new Job("10", 10, 0, 3, 5);
+            job10.AddPrevios(job8);
+            job10.AddPrevios(job9);
 
-            List<Job> jobs = new List<Job>() { job1, job2, job3, job4, job5, job6, job7, job8, job9, job10 };
-            string[] workersName = { "Vasya", "Petya" };
-
-            int[,] workersTime =
+            var timeOfWork = new Dictionary<Job, int?>
             {
-                { 1,2,2,2,2,2,2,2,2,1},
-                { 1,2,2,2,2,2,2,2,2,1}
+                {job1, 1 },
+                {job2, 2 },
+                {job3, 1 },
+                {job4, 1 },
+                {job5, 1 },
+                {job6, 2 },
+                {job7, 1 },
+                {job8, 1},
+                {job9, 1 },
+                {job10, 1 }
             };
+            var worker1 = new Worker("vova", timeOfWork);
+            var worker2 = new Worker("petya", timeOfWork);
+            var worker3 = new Worker("kolya", timeOfWork);
+            var project1 = new Project(
+                "first", 0, 4, 
+                new List<Job> { job1, job2, job3, job4, job5 }, 
+                new List<Worker> { worker1, worker2, worker3 });
+            var project2 = new Project(
+                "second", 0, 3,
+                new List<Job> { job6, job7, job8, job9, job10 },
+                new List<Worker> { worker1, worker2, worker3 });
 
-            var projectProtorype = new Project("Test", 0, 10, jobs, workersName, workersTime);
-            var project = new ProjectRepeater(projectProtorype, 100);
+            var project = new ProjectComposite(new List<IProject> { project1, project2 });
             project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
-            project.Reset();
+            var printer = new PrinterToDebug();
+            var printerToFile = new PrinterToFile(project.Name);
+            project.PrintTimeLine(printer);
             project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
             var multiAlgorithmSchedule = project.Schedule;
-
+            project.PrintTimeLine(printer);
+            project.PrintGraph(printerToFile);
             Assert.True(multiAlgorithmSchedule.Penalty < singleAlgorithmSchedule.Penalty);
         }
     }

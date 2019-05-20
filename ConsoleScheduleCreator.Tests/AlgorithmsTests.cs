@@ -1,4 +1,5 @@
 ﻿using ConsoleScheduleCreator.Algorithms;
+using ConsoleScheduleCreator.Entities.Project;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
