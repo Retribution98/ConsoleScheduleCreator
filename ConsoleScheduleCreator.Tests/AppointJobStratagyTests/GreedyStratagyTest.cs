@@ -26,12 +26,12 @@ namespace ConsoleScheduleCreator.Tests.AppointJobStratagyTests
             var proj = new Project("Test", 0, 100, jobs, workersName, workersTime);
             var plan = new Plan(proj.Workers, proj.Late);
             plan.AppointJob(job1, proj.Workers.Where(x => x.Name == "Petya").FirstOrDefault(), 1);
-            var drirectiveTimeStratagy = new JobsDirectiveTime();
+            var drirectiveTimeStratagy = new JobsDelayMinimization();
 
             var expectedPenalty = 20L;
 
             Assert.True(job1.IsCompleted);
-            Assert.Equal(expectedPenalty, drirectiveTimeStratagy.GetPenalty(proj, plan));
+            Assert.Equal(expectedPenalty, drirectiveTimeStratagy.GetCriterion(proj, plan));
             //Assert.Equal(new Job[1, 5] {{ job1, job1, job1, null, null }}, plan);
         }
 

@@ -1,5 +1,6 @@
 using ConsoleScheduleCreator.Algorithms;
 using ConsoleScheduleCreator.Algorithms.SheduleClasses;
+using ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy;
 using ConsoleScheduleCreator.Entities;
 using ConsoleScheduleCreator.Entities.Project;
 using ConsoleScheduleCreator.GetWorkerStratagy;
@@ -10,7 +11,7 @@ using Xunit;
 
 namespace ConsoleScheduleCreator.Tests
 {
-    public class ProjectTests
+    public class AnalisisTest
     {
         [Fact]
         public void CreateScheduleTests_Proj1_FrontAlgorithm_FirstlyStratagy()
@@ -44,7 +45,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 20, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(new MinTimeOfWork(), new NextJobStratagies.FirstlyStratagy(), new PenaltyStratagy()), new PrinterToConsole()));
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
             {
@@ -90,7 +91,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(getWorkerStratagy: new MinTimeOfWork(), nextJobStratagy: new NextJobStratagies.FirstlyStratagy()), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(new MinTimeOfWork(), new NextJobStratagies.FirstlyStratagy(), new PenaltyStratagy()), new PrinterToConsole()));
 
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
@@ -137,7 +138,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
 
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
@@ -187,14 +188,15 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var specialShedule = project.Schedule;
             project.Reset();
             project.CreateSchedule(
                 new FrontAlgorithm(
-                    new JobsDirectiveTime(
-                        getWorkerStratagy: new Algorithms.Stratagies.GetWorkerStratagy.FirstlyStratagy(),
-                        nextJobStratagy: new NextJobStratagies.FirstlyStratagy()),
+                    new JobsDelayMinimization(
+                        new Algorithms.Stratagies.GetWorkerStratagy.FirstlyStratagy(),
+                        new NextJobStratagies.FirstlyStratagy(),
+                        new PenaltyStratagy()),
                     new PrinterToConsole()));
             var defaultSchedule = project.Schedule;
 
@@ -239,14 +241,15 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 15, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new EqualWorkload(), new PrinterToConsole()));
             var specialShedule = project.Schedule;
             project.Reset();
             project.CreateSchedule(
                 new FrontAlgorithm(
-                    new EqualWorker(
-                        getWorkerStratagy: new Algorithms.Stratagies.GetWorkerStratagy.FirstlyStratagy(),
-                        nextJobStratagy: new NextJobStratagies.FirstlyStratagy()),
+                    new EqualWorkload(
+                        new Algorithms.Stratagies.GetWorkerStratagy.FirstlyStratagy(),
+                        new NextJobStratagies.FirstlyStratagy(),
+                        new CriticalWorkersStratagy()),
                     new PrinterToConsole()));
             var defaultSchedule = project.Schedule;
 
@@ -286,7 +289,7 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 10, jobs, workersName, workersTime);
-            project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.MultiAlgorihm(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var actual = project.Schedule.Planner;
             var expected = new Job[,]
             {
@@ -335,10 +338,10 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             Project project = new Project("Test", 0, 10, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
             project.Reset();
-            project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.MultiAlgorihm(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var multiAlgorithmSchedule = project.Schedule;
 
             Assert.True(multiAlgorithmSchedule.Penalty < singleAlgorithmSchedule.Penalty);
@@ -376,13 +379,13 @@ namespace ConsoleScheduleCreator.Tests
             };
 
             var project = new Project("Test", 0, 10, jobs, workersName, workersTime);
-            project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new EqualWorkload(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
             project.Reset();
             int numTrue = 0;
             for (var i=0; i < 100; i++)
             {
-                project.MultiAlgorihm(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+                project.MultiAlgorihm(new FrontAlgorithm(new EqualWorkload(), new PrinterToConsole()));
                  if (project.Schedule.Penalty < singleAlgorithmSchedule.Penalty)
                 {
                     numTrue++;
@@ -431,13 +434,13 @@ namespace ConsoleScheduleCreator.Tests
                     projectProrotype.Clone() as IProject,
                     projectProrotype.Clone() as IProject
                 });
-            project.CreateSchedule(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new EqualWorkload(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
             project.Reset();
             int numTrue = 0;
             for (var i = 0; i < 100; i++)
             {
-                project.MultiAlgorihm(new FrontAlgorithm(new EqualWorker(), new PrinterToConsole()));
+                project.MultiAlgorihm(new FrontAlgorithm(new EqualWorkload(), new PrinterToConsole()));
                 if (project.Schedule.Penalty < singleAlgorithmSchedule.Penalty)
                 {
                     numTrue++;
@@ -498,12 +501,12 @@ namespace ConsoleScheduleCreator.Tests
                 new List<Worker> { worker1, worker2, worker3 });
 
             var project = new ProjectComposite(new List<IProject> { project1, project2 });
-            project.CreateSchedule(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.CreateSchedule(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var singleAlgorithmSchedule = project.Schedule;
             var printer = new PrinterToDebug();
-            var printerToFile = new PrinterToFile(project.Name);
+            var printerToFile = new PrinterToFile("TESTVIZ");
             project.PrintTimeLine(printer);
-            project.MultiAlgorihm(new FrontAlgorithm(new JobsDirectiveTime(), new PrinterToConsole()));
+            project.MultiAlgorihm(new FrontAlgorithm(new JobsDelayMinimization(), new PrinterToConsole()));
             var multiAlgorithmSchedule = project.Schedule;
             project.PrintTimeLine(printer);
             project.PrintGraph(printerToFile);

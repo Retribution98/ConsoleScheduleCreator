@@ -4,13 +4,10 @@ using System.Text;
 using Xunit;
 using ConsoleScheduleCreator;
 using ConsoleScheduleCreator.Entities.Project;
-using Shields.GraphViz.Models;
-using Shields.GraphViz.Services;
-using Shields.GraphViz.Components;
 using System.IO;
 using System.Threading;
 
-namespace ConsoleScheduleCreator.Tests.Projects
+namespace ConsoleScheduleCreator.Tests.ProjectTests
 {
     public class ProjectCompositeTests
     {
@@ -36,21 +33,5 @@ namespace ConsoleScheduleCreator.Tests.Projects
         //    new Project()
         //}
 
-        [Fact]
-        public async void GraphViz()
-        {
-            Graph graph = Graph.Directed                
-                .Add(EdgeStatement.For("a", "b"))
-                .Add(EdgeStatement.For("a", "c"));
-            IRenderer renderer = new Renderer("C:\\Users\\kiril\\Desktop\\Paterns Старостин\\ConsoleScheduleCreator\\graphviz\\bin\\");
-            using (var file = File.Create("graph.png"))
-            {
-                await renderer.RunAsync(
-                    graph, file,
-                    RendererLayouts.Dot,
-                    RendererFormats.Png,
-                    CancellationToken.None);
-            }
-        }
     }
 }

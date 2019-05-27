@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +16,8 @@ namespace ConsoleScheduleCreator
         public int EarlyTime { get; }                                       //Раннее начало выполнения
         public int LateTime { get; }                                        //Позднее окончание выполнения
         public int Mulct { get; set; }                                           //Штраф
-        public  List<Job> Previos { get; set; }                    //Предшествующие работы
-        public  bool IsCompleted { get; private set; }                         //Флаг окончания выполнения работы
+        public List<Job> Previos { get; set; }                    //Предшествующие работы
+        public bool IsCompleted { get; private set; }                         //Флаг окончания выполнения работы
         public int TimeStart { get; set; }                                  //Время начала выполнения работы
         public int TimeEnd { get; set; }                                    //Время окончания выполения работы
         public int Priority { get; set; }                       // Приоритет для многпороходного алгоритма
@@ -106,6 +108,34 @@ namespace ConsoleScheduleCreator
             Array.Copy(previos, NewPrevios, amt);
             num_Prev = amt;
         }*/
+        public void SaveToJson(JsonTextWriter writer)
+        {
+            writer.WriteStartObject();
 
+            writer.WritePropertyName("id");
+            writer.WriteValue(Id);
+
+            writer.WritePropertyName("name");
+            writer.WriteValue(Name);
+
+            writer.WritePropertyName("earlyTime");
+            writer.WriteValue(EarlyTime);
+
+            writer.WritePropertyName("lateTime");
+            writer.WriteValue(LateTime);
+
+            writer.WritePropertyName("mulct");
+            writer.WriteValue(Mulct);
+            
+            writer.WritePropertyName("previos");
+            writer.WriteStartArray();
+            foreach (var job in Previos)
+            {
+                writer.WriteValue(job.Id);
+            }
+            writer.WriteEndArray();
+
+            writer.WriteEndObject();
+        }
     }
 }

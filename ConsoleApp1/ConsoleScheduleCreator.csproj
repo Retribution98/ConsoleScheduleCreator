@@ -33,8 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shields.GraphViz, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shields.GraphViz.1.0.2.0\lib\net45\Shields.GraphViz.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetGraph, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetGraph.1.0.2\lib\netstandard2.0\DotNetGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.0.34.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -49,23 +55,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\SheduleClasses\EqualWorker.cs" />
-    <Compile Include="Algorithms\SheduleClasses\ISheduleClass.cs" />
-    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\FirstlyStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\ModifyStratagy\CriticalWorkersStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\EqualTimeInProces.cs" />
+    <Compile Include="Algorithms\SheduleClasses\CriterionAbstract.cs" />
+    <Compile Include="Algorithms\SheduleClasses\EqualWorkload.cs" />
+    <Compile Include="Algorithms\SheduleClasses\ICriterion.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagies\FirstlyStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagies\CriticalWorkersStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagies\EqualTimeInProces.cs" />
+    <Compile Include="DTOs\JobDto.cs" />
+    <Compile Include="DTOs\ProjectDto.cs" />
+    <Compile Include="DTOs\WorkerDto.cs" />
     <Compile Include="Entities\Front.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Algorithms\FrontAlgorithm.cs" />
-    <Compile Include="Algorithms\Stratagies\ModifyStratagy\CriticalJobsStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\ModifyStratagy\IModifyStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\MinTimeOfWork.cs" />
-    <Compile Include="Algorithms\Stratagies\GetWorkerStratagy\IGetWorkerStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagies\CriticalJobsStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\ModifyStratagies\IModifyStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagies\MinTimeOfWork.cs" />
+    <Compile Include="Algorithms\Stratagies\GetWorkerStratagies\IGetWorkerStratagy.cs" />
     <Compile Include="Entities\Plan.cs" />
-    <Compile Include="Algorithms\Stratagies\NextJobStratagys\FirstlyStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\NextJobStratagys\INextJobStratagy.cs" />
-    <Compile Include="Algorithms\Stratagies\NextJobStratagys\MaxMulctStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagies\FirstlyStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagies\INextJobStratagy.cs" />
+    <Compile Include="Algorithms\Stratagies\NextJobStratagies\MaxMulctStratagy.cs" />
     <Compile Include="Entities\Project\IProject.cs" />
+    <Compile Include="Entities\Project\PipelineBuilder.cs" />
+    <Compile Include="Entities\Project\ProjectBuilder.cs" />
     <Compile Include="Entities\Project\ProjectComposite.cs" />
     <Compile Include="Entities\Project\ProjectRepeater.cs" />
     <Compile Include="Print.cs" />
@@ -75,12 +87,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Schedule.cs" />
     <Compile Include="Entities\Worker.cs" />
-    <Compile Include="Algorithms\SheduleClasses\JobsDirectiveTime.cs" />
+    <Compile Include="Algorithms\SheduleClasses\JobsDelayMinimization.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

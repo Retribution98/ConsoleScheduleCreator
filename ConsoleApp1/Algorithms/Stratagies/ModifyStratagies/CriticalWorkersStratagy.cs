@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
-    class CriticalWorkersStratagy : IModifyStratagy
+    public class CriticalWorkersStratagy : IModifyStratagy
     {
         public void ModifyProject(IProject project, Plan plan)
         {

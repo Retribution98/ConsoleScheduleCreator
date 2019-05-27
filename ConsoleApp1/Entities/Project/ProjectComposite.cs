@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleScheduleCreator.Algorithms;
-using Shields.GraphViz.Models;
+using DotNetGraph;
 
 namespace ConsoleScheduleCreator.Entities.Project
 {
@@ -70,16 +70,18 @@ namespace ConsoleScheduleCreator.Entities.Project
 
         public void PrintGraph(IPrinter printer)
         {
-            
-            var stats = new List<Statement>();
+            var graph = new DotGraph(Name, true);
             foreach (var job in Jobs)
             {
-                stats.AddRange(job.Previos.Select(pr => EdgeStatement.For(pr.Name, job.Name)));
+                var node = new DotNode($"\"{job.Id}\"") { Label = job.Name };
+                graph.Add(node);
             };
-            var graph = Graph.Directed
-                .Add(EdgeStatement.For("a", "b"))
-                .AddRange(stats);
-            printer.PrintGraph(graph, "TEST");
+            foreach (var job in Jobs)
+            {
+                job.Previos
+                    .ForEach(prev => graph.Add(new DotArrow($"\"{prev.Id}\"", $"\"{job.Id}\"")));
+            };
+            printer.PrintGraph(graph);
         }
     }
 }

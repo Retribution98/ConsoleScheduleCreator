@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
 {
-    class PenaltyStratagy: IModifyStratagy
+    public class PenaltyStratagy: IModifyStratagy
     {
         private IDictionary<Job, (int? start, int? end)> _jobsTimeEnd;
 
@@ -19,27 +19,30 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
                 if (_jobsTimeEnd[job].end > _jobsTimeEnd[lastJob].end && _jobsTimeEnd[job].start != job.EarlyTime)
                     lastJob = job;
             }
-            var result = GetCriticalJobs(lastJob);
+            var result = new List<Job>();
+            AddCriticalJobs(lastJob, result);
             return result;
         }
 
-        private IEnumerable<Job> GetCriticalJobs(Job job)
+        private void AddCriticalJobs(Job job, List<Job> criticalJobs)
         {
+            criticalJobs.Add(job);
             var criticalPrev = job.Previos.Where(j => _jobsTimeEnd[j].end == _jobsTimeEnd[job].start - 1 && _jobsTimeEnd[j].start != j.EarlyTime).ToList();
             if (criticalPrev.Any())
             {
-                var result = new List<Job> { job };
-                criticalPrev.ForEach(j => result.AddRange(GetCriticalJobs(j)));
-                return result;
-            }
-            else
-            {
-                return new List<Job> { job };
+                criticalPrev.ForEach(j =>
+                {
+                    if (!criticalJobs.Contains(j))
+                    {
+                        AddCriticalJobs(j, criticalJobs);
+                    }
+                });
             }
         }
 
         public void ModifyProject(IProject project, Plan plan)
         {
+            var print = new PrinterToDebug();
             _jobsTimeEnd = new Dictionary<Job, (int?, int?)>();
             foreach(var job in project.Jobs)
             {
@@ -56,7 +59,7 @@ namespace ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy
             var criticalJobs = GetCriticalJobs(project);
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine("Critical jobs:" + String.Join(", ", criticalJobs.Select(j => j.Id)));
+            print.PrintLn("Critical jobs:" + String.Join(", ", criticalJobs.Select(j => j.Name)));
             Console.ResetColor();
             foreach (var job in criticalJobs)
             {

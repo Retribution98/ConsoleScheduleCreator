@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +50,25 @@ namespace ConsoleScheduleCreator
         public void Print(IPrinter printer)
         {
             printer.PrintLn(this.ToString());
+        }
+
+        public void SaveToJson(JsonTextWriter writer)
+        {
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("name");
+            writer.WriteValue(Name);
+
+            writer.WritePropertyName("timeOfWork");
+            writer.WriteStartObject();
+            foreach (var time in _timeOfWork)
+            {
+                writer.WritePropertyName(time.Key.Id.ToString());
+                writer.WriteValue(time.Value);
+            }
+            writer.WriteEndObject();
+
+            writer.WriteEndObject();
         }
     }
 

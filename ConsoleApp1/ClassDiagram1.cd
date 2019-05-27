@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ConsoleScheduleCreator.Algorithms.FrontAlgorithm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAABAAAAAACAAAABAAAAAAAAAIAA=</HashCode>
+      <FileName>Algorithms\FrontAlgorithm.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.Front" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Entities\Front.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.CriterionAbstract">
+    <Position X="1.75" Y="3.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>QAQAAAAQAAAAAAAAAAAQAAAhAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Algorithms\SheduleClasses\CriterionAbstract.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Job" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACIAAACAAABAMEAAAAAAQAAAAABBAAQgQgAAAEAAA=</HashCode>
+      <FileName>Entities\Job.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Worker" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAgAAAAAAAAAAAEAAAAAAQAAAAAAAAAEBAAAAAEAAA=</HashCode>
+      <FileName>Entities\Worker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.PrinterToConsole" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAEAAA=</HashCode>
+      <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.PrinterToDebug" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAEAAA=</HashCode>
+      <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.PrinterToFile" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAACACAAAAAAAAAAAAAAAAAAEAAAAgAAAEAAA=</HashCode>
+      <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Program" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAQAAACgAEACAAAAAAAAAAAAAAABAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Utils" Collapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAiAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Utils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.SheduleClasses.EqualWorkload">
+    <Position X="0.5" Y="6.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\SheduleClasses\EqualWorkload.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy.EqualTimeInProces" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\GetWorkerStratagies\EqualTimeInProces.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.Stratagies.GetWorkerStratagy.FirstlyStratagy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\GetWorkerStratagies\FirstlyStratagy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.GetWorkerStratagy.MinTimeOfWork" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\GetWorkerStratagies\MinTimeOfWork.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy.PenaltyStratagy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAAAAAAAAAEAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\ModifyStratagies\CriticalJobsStratagy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy.CriticalWorkersStratagy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\ModifyStratagies\CriticalWorkersStratagy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.NextJobStratagies.FirstlyStratagy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\NextJobStratagies\FirstlyStratagy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.NextJobStratagies.MaxMulctStratagy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\NextJobStratagies\MaxMulctStratagy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.DTOs.JobDto" Collapsed="true">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAABAAAQgAgAAAAAAA=</HashCode>
+      <FileName>DTOs\JobDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.DTOs.ProjectDto" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACEAAAAQAAAAAAAAAAQAgAAAAAAA=</HashCode>
+      <FileName>DTOs\ProjectDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.DTOs.WorkerDto" Collapsed="true">
+    <Position X="15.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTOs\WorkerDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Plan" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAABAAAAAAAAAACAAAAAAEAABAAABAAIAgAAAAAQA=</HashCode>
+      <FileName>Entities\Plan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Project.Pipeline" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAMACBAEAgACBACgAAAAAACAAIAAAAMCIQAAAAIY=</HashCode>
+      <FileName>Entities\Project\PipelineBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Project.Project" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAJAAACEAAQAQAAEAAAABABRAgAAAEABA=</HashCode>
+      <FileName>Entities\Project\Project.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Project.ProjectBuilder" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgBAAACEAAAAQAAAAAAAAAAQAgAACAAAA=</HashCode>
+      <FileName>Entities\Project\ProjectBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Project.ProjectComposite" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAACGAAQAQAAEAAAABABRAgAAAAABA=</HashCode>
+      <FileName>Entities\Project\ProjectComposite.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ConsoleScheduleCreator.Entities.Project.ProjectRepeater" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACBAAACEAASAQAAkAAAABABRAgAAAAABA=</HashCode>
+      <FileName>Entities\Project\ProjectRepeater.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Struct Name="ConsoleScheduleCreator.Schedule" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Entities\Schedule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="ConsoleScheduleCreator.Algorithms.IAlgorithm" Collapsed="true">
+    <Position X="8.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAIAA=</HashCode>
+      <FileName>Algorithms\IAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.IGetWorkerStratagy" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\GetWorkerStratagies\IGetWorkerStratagy.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.IPrinter" Collapsed="true">
+    <Position X="11.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAEAAA=</HashCode>
+      <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.IPrintable" Collapsed="true">
+    <Position X="10" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Print.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.Algorithms.SheduleClasses.ICriterion" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\SheduleClasses\ICriterion.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.Algorithms.Stratagies.ModifyStratagy.IModifyStratagy" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\ModifyStratagies\IModifyStratagy.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.NextJobStratagies.INextJobStratagy" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Stratagies\NextJobStratagies\INextJobStratagy.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ConsoleScheduleCreator.Entities.IProject">
+    <Position X="13.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAACEAAQAQAAEAAAABABRAgAAAAAAA=</HashCode>
+      <FileName>Entities\Project\IProject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

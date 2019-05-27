@@ -8,7 +8,7 @@ namespace ConsoleScheduleCreator.NextJobStratagies
 {
     public class MaxMulctStratagy : INextJobStratagy
     {
-        public Job GetJob(List<Job> jobs)
+        public Job GetJob(IEnumerable<Job> jobs)
         {
             if (jobs == null) return null;
             return jobs

@@ -1,6 +1,4 @@
-﻿using Shields.GraphViz.Components;
-using Shields.GraphViz.Models;
-using Shields.GraphViz.Services;
+﻿using DotNetGraph;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +14,7 @@ namespace ConsoleScheduleCreator
     {
         void Print(string msg);
         void PrintLn(string msg);
-        void PrintGraph(Graph graph, string name);
+        void PrintGraph(DotGraph graph);
     }
 
     public interface IPrintable
@@ -31,7 +29,7 @@ namespace ConsoleScheduleCreator
             Console.Write(msg);
         }
 
-        public void PrintGraph(Graph graph, string name)
+        public void PrintGraph(DotGraph graph)
         {
             throw new NotImplementedException();
         }
@@ -48,7 +46,7 @@ namespace ConsoleScheduleCreator
             Debug.Write(msg);
         }
 
-        public void PrintGraph(Graph graph, string name)
+        public void PrintGraph(DotGraph graph)
         {
             throw new NotImplementedException();
         }
@@ -58,46 +56,36 @@ namespace ConsoleScheduleCreator
             Debug.WriteLine(msg);
         }
     }
-    public class PrinterToFile : IPrinter
+    public class PrinterToFile : IPrinter, IDisposable
     {
         private readonly string _path;
+        private readonly StreamWriter sw;
 
         public PrinterToFile(string path)
         {
             _path = path;
+            sw = new StreamWriter(_path);
+        }
+
+        public void Dispose()
+        {
+            sw.Dispose();
         }
 
         public void Print(string msg)
         {
-            using (var sw = new StreamWriter(_path))
-            {
-                sw.Write(msg);
-            }
+             sw.Write(msg);
         }
 
-        public void PrintGraph(Graph graph, string name)
+        public void PrintGraph(DotGraph graph)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                name = "graph";
-            }
-            var renderer = new Renderer("C:\\Users\\kiril\\Desktop\\Paterns Старостин\\ConsoleScheduleCreator\\graphviz\\bin\\");
-            using (var file = File.Create(name+".png"))
-            {
-                renderer.RunAsync(
-                    graph, file,
-                    RendererLayouts.Dot,
-                    RendererFormats.Png,
-                    CancellationToken.None);
-            }
+            var dot = graph.Compile();
+            Print(dot);
         }
 
         public void PrintLn(string msg)
         {
-            using (var sw = new StreamWriter(_path))
-            {
-                sw.Write(msg);
-            }
+            sw.WriteLine(msg);
         }
     }
 }

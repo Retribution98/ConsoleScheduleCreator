@@ -50,10 +50,11 @@ namespace ConsoleScheduleCreator.Entities
 
         public void AppointJob(Job job, Worker worker, int time)
         {
+            var printer = new PrinterToDebug();
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.Write($"Appoint job in {time}: {job.Id}");
+            printer.Print($"Appoint job in {time}: {job.Id}");
             Console.ResetColor();
-            Console.WriteLine();
+            printer.PrintLn("");
             var timeOfWork = worker.GetTimeOfWork(job);
             if (timeOfWork == null)
             {

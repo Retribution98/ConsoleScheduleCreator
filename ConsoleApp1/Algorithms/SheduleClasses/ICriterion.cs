@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.Algorithms.SheduleClasses
 {
-    public interface ISheduleClass : IGetWorkerStratagy, INextJobStratagy, IModifyStratagy
+    public interface ICriterion : IGetWorkerStratagy, INextJobStratagy, IModifyStratagy
     {
-        long GetPenalty(IProject proj, Plan plan);
+        long GetCriterion(IProject proj, Plan plan);
     }
 }

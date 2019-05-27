@@ -11,13 +11,13 @@ namespace ConsoleScheduleCreator.Algorithms
 {
     public class FrontAlgorithm : IAlgorithm
     {
-        private readonly ISheduleClass _sheduleClass;
+        private readonly ICriterion _criterion;
         private readonly IPrinter _printer;
 
-        public FrontAlgorithm(ISheduleClass sheduleClass, IPrinter printer)
+        public FrontAlgorithm(ICriterion sheduleClass, IPrinter printer = null)
         {
-            _sheduleClass = sheduleClass;
-            _printer = printer;
+            _criterion = sheduleClass;
+            _printer = printer ?? new PrinterToDebug();
         }
 
         private bool HaveDidntCompleteJob(IEnumerable<Job> jobs)
@@ -46,27 +46,36 @@ namespace ConsoleScheduleCreator.Algorithms
                 //Назанчаем работы из фронта
                 while ((front.Jobs.Count != 0) && plan.HaveFreeWorker(time))
                 {
-                    var job = front.GetNextJob(_sheduleClass);
-                    var worker = _sheduleClass.GetWorker(job, plan, time);
+                    var job = front.GetNextJob(_criterion);
+                    var worker = _criterion.GetWorker(job, plan, time);
                     plan.AppointJob(job, worker, time);
                     //нельзя просто удалить установившуюся работу, так как могут появиться новые работы во фронте
                     front = new Front(proj.Jobs, time);
                 }
             }
-            var penalty = _sheduleClass.GetPenalty(proj, plan);
+            var penalty = _criterion.GetCriterion(proj, plan);
             proj.Reset();
             return new Schedule(plan, penalty);
         }
 
         public Schedule MultiAlgorihm(IProject proj)
         {
-            var schedule = CreateShedule(proj);
-            var newSchedule = schedule;
+            Schedule newSchedule, schedule;
+            if (proj.Schedule.Planner == null)
+            {
+                schedule = CreateShedule(proj);
+                newSchedule = schedule;
+            }
+            else
+            {
+                schedule = proj.Schedule;
+                newSchedule = proj.Schedule;
+            }
             do
             {
                 schedule = newSchedule;
                 
-                _sheduleClass.ModifyProject(proj, schedule.Planner);
+                _criterion.ModifyProject(proj, schedule.Planner);
                 proj.Reset();
                 newSchedule = CreateShedule(proj);
                 _printer.PrintLn("//////////");

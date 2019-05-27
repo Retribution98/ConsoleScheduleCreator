@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleScheduleCreator.NextJobStratagies
 {
-    public class FirstlyStratagy : INextJobStratagy
+    public interface INextJobStratagy
     {
-        public Job GetJob(List<Job> jobs)
-        {
-            return jobs?.FirstOrDefault();
-        }
+        Job GetJob(IEnumerable<Job> jobs);
     }
 }
